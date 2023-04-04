@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <style>
+            * {
+                font-size: 10px;
+            }
+            table {
+                table-layout: fixed;
+                width: 100%;
+                border: 1px solid black;
+            }
+            table th {
+                text-align: left;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+            table td {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+            @page {
+                size: letter landscape;
+                margin: 1cm;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1> Lista de Comparticipações </h1>
+        <table>
+            <tr>
+                <th> NºSócio </th>
+                <th> Nome Sócio </th>
+                <th> Comparticipação </th>
+                <th> Descrição </th>
+                <th> Dt. Valor </th>
+            </tr>
+            {%for data in record%}
+            <tr>
+                <td style="width: 10%;"> {{data.socio.nsocio }} </td>
+                <td style="width: 40%; text-align: left;"> {{data.socio.nome |title}} </td>
+                <td style="width: 15%;"> {{data.valor_calculado}} </td>
+                <td style="width: 25%;"> {{data.descricao}} </td>
+                <td style="width: 10%;"> {{data.dt_valor}} </td>
+            </tr>
+            {%endfor%}
+        </table>
+    </body>
+</html>

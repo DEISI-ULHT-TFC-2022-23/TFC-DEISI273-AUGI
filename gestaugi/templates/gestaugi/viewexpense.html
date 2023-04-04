@@ -1,0 +1,54 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <style>
+      .select-box {width: 460px;}
+      label { white-space: nowrap; }
+      div { display: flow-root;}
+    </style>
+  {% block title %} <h4> Consulta Despesa nº {{ despesa }} </h4> {% endblock %}
+  <form action = "" method = "" class = "editform">
+      {% csrf_token %}
+      <fieldset class="fs-box-shadow">
+          <div class="form-group-sm">
+               <div class="col-sm-12">
+                    {#{{ form|crispy }}#}
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-3">
+                              <div>
+                                <label>Tipo Despesa</label>
+                              </div>
+                              <select class="select-box" name="tdespesa">
+                                  {% for tipo in tdespesa %}
+                                      <option selected value="{{ tipo.tipo_id }}" onclick="fill_desc('{{ tipo.descricao }}')" >{{ tipo.tipo_id }} - {{ tipo.descricao }}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-5 mb-0">
+                            {{ form.despesa|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-5 mb-0">
+                          {{ form.ano|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-0">
+                           {{ form.descricao|as_crispy_field }}
+                        </div>
+                        <div style="display: none;">
+                          {{ form.dt_registo|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                       <div class="form-group col-md-6 mb-0">
+                          <button class="btn btn-primary" type="button" onclick="location.href='/expenses'" > Voltar </button>
+                       </div>
+                    </div>
+               </div>
+          </div>
+      </fieldset>
+  </form>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <style>
+      .select-box { width: 300px; }
+      .select-box2 { width: 210px; }
+      label { white-space: nowrap; }
+      div { display: flow-root;}
+    </style>
+  {% block title %} <h4> Edita Comparticipação nº {{ compart.compart_id }}</h4> {% endblock %}
+  <form action = "" method = "POST" class = "editform">
+      {% csrf_token %}
+      <div class="form-group-sm" style="position:absolute">
+           <fieldset class="fs-box-shadow">
+               <div class="col-sm-12">
+                    {#{{ form|crispy }}#}
+                    <div class="form-row">
+                        <div class="form-group col-md-7 mb-0">
+                              <div>
+                                <label>Sócio</label>
+                              </div>
+                              <select class="select-box" id="socio_id" name="socio">
+                                  {% for lote in lote %}
+                                      <option selected value="{{ lote.socio_id }}"> {{ lote.socio.nome }} - Sócio nº {{ lote.socio.nsocio }}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                              <div>
+                                <label>Lote</label>
+                              </div>
+                              <select class="select-box select-box2" id="lote_id" name="lote">
+                                  {% for lote in lote %}
+                                      <option selected value="{{ lote.lote_id }}" onclick="fill_calc_values({{ lote.area }},{{ lote.nfogos }},
+                                              {{ lote.frenteslote }})">Lote nº {{ lote.nlote }}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-0">
+                          {{ form.descricao|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                           {{ form.valor_calculado|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.tipo|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.dt_valor|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div style="display: none;">
+                          {{ form.dt_registo|as_crispy_field }}
+                          {{ form.estado|as_crispy_field }}
+                          {{ form.dt_estado|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                       <div class="form-group col-md-6 mb-0">
+                          <button type="submit" class="btn btn-primary"> Confirmar </button>
+                          <button class="btn btn-info" type="button" onclick="location.href='/coparticipation'" > Cancelar </button>
+                       </div>
+                       <div class="form-group col-md-6 mb-0">
+                            <button class="btn btn-danger delete_record" type="button" data-target="#delete-item-modal"
+                             data-toggle="modal"  onclick="delete_item(this)"> Suprimir </button>
+                       </div>
+                    </div>
+               </div>
+           </fieldset>
+      </div>
+      <div  style="position:absolute; margin-top: 0px; margin-left: 700px; margin-bottom: 0px; width: 250px">
+         <form style="display:inline">
+            <fieldset class="ga-calculator">
+              <p id="legend">Calculo</p>
+              <label for="vobra" class="ga-calc-label">Valor Total Obra:</label>
+              <input type="number" step="0.01" id="vobra" name="vobra" value="{{ vtotobra }}" class="ga-calc-input"> <br>
+              <label for="frentelote" class="ga-calc-label">Frente Lote:</label>
+              <input type="number" id="frentelote" name="frentelote" class="ga-calc-input"> <br>
+              <label for="tfrenteslotes" class="ga-calc-label">Total Frentes Lote:</label>
+              <input type="number" step="0.01" id="tfrenteslotes" name="tfrenteslotes" value="{{ tfrenlot }}" class="ga-calc-input"> <br>
+              <label for="fogoslote" class="ga-calc-label">Fogos Lote:</label>
+              <input type="number" id="fogoslote" name="fogoslote" class="ga-calc-input"> <br>
+              <label for="tfogoslotes" class="ga-calc-label">Total Fogos Lotes:</label>
+              <input type="number" id="tfogoslotes" name="tfogoslotes" value="{{ tfoglot }}" class="ga-calc-input"> <br>
+              <label for="arealote" class="ga-calc-label">Área Lote:</label>
+              <input type="number" step="0.01" id="arealote" name="arealote" class="ga-calc-input"> <br>
+              <label for="tarealotes" class="ga-calc-label">Total Áreas Lotes:</label>
+              <input type="number" step="0.01" id="tarealotes" name="tarealotes" value="{{ tarealot }}" class="ga-calc-input"> <br> <br>
+              <button class="btn btn-primary" type="button" onclick="calculate()"> Calcular </button>
+              <label id="resultado" style="white-space: nowrap"> </label>
+            </fieldset>
+        </form>
+      </div>
+      {% block modalcontent %}
+        <div class="modal fade" id="delete-item-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Confirma a supressão da Contribuição nº {{ compart }} ? </p>
+                    </div>
+                    <div class="justify-content mb-2 mr-2 text-right" style="padding: 2px">
+                        <form method="post" id="item-delete-form">
+                            <button type="button" class="btn btn-info mr-1" data-dismiss="modal">Cancelar</button>
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" id="confirm-delete">Suprimir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+      {% endblock %}
+  </form>
+  <script>
+     {# Calculo da comparticipação #}
+      function calculate(){
+                var Compart = 0 ;
+                var vo = document.getElementById("vobra").value;
+                var frl = document.getElementById("frentelote").value;
+                var tfrl = document.getElementById("tfrenteslotes").value;
+                var fgl = document.getElementById("fogoslote").value;
+                var tfgl = document.getElementById("tfogoslotes").value;
+                var al = document.getElementById("arealote").value;
+                var tal = document.getElementById("tarealotes").value;
+                Compart = ((40/100) * vo * (frl/tfrl)) +
+                          ((30/100) * vo * (fgl/tfgl)) +
+                          ((30/100) * vo * (al/tal));
+                document.getElementById("resultado").innerHTML = Compart.toLocaleString() ;
+      }
+     {# Preenche valor da calculadora #}
+      function fill_calc_values(area,fogos,frentes){
+            document.getElementById("frentelote").value = frentes ;
+            document.getElementById("fogoslote").value = fogos ;
+            document.getElementById("arealote").value = area;
+      }
+      {# Suprime contribuição #}
+      function delete_item(selected){
+            document.getElementById("item-delete-form").action = '/deletecoparticipation/{{ compart }}'
+      }
+  </script>
+{% endblock %}

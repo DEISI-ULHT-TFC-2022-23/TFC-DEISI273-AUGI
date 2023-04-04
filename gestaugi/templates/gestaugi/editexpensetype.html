@@ -1,0 +1,58 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <style>
+      label { white-space: nowrap; }
+      div { display: flow-root;}
+    </style>
+  {% block title %} <h4> Edita Tipo Despesa nº {{ tipo_id }} </h4> {% endblock %}
+  <form action = "" method = "POST" class = "editform">
+      {% csrf_token %}
+      <fieldset class="fs-box-shadow">
+          <div class="form-group-sm">
+               <div class="col-sm-12">
+                    {#{{ form|crispy }}#}
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-0">
+                           {{ form.descricao|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                       <div class="form-group col-md-6 mb-0">
+                          <button type="submit" class="btn btn-primary"> Confirmar </button>
+                          <button class="btn btn-info" type="button" onclick="location.href='/expensestypes'" > Cancelar </button>
+                       </div>
+                       <div class="form-group col-md-6 mb-0">
+                            <button class="btn btn-danger delete_record" type="button" data-target="#delete-item-modal"
+                             data-toggle="modal"  onclick="delete_item(this)"> Suprimir </button>
+                       </div>
+                    </div>
+               </div>
+          </div>
+      </fieldset>
+  </form>
+  {% block modalcontent %}
+    <div class="modal fade" id="delete-item-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Confirma a supressão do Tipo de Despesa nº {{ tipo_id }} ? </p>
+                </div>
+                <div class="justify-content mb-2 mr-2 text-right" style="padding: 2px">
+                    <form method="post" id="item-delete-form">
+                        <button type="button" class="btn btn-info mr-1" data-dismiss="modal">Cancelar</button>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" id="confirm-delete">Suprimir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  {% endblock %}
+  <script>
+        function delete_item(selected){
+                document.getElementById("item-delete-form").action = '/deletexpensetype/{{ tipo_id }}'
+        }
+  </script>
+{% endblock %}

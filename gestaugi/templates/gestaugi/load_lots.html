@@ -1,0 +1,5 @@
+<option selected>Escolha Lote...</option>
+{% for lote in lotes %}
+  <option value="{{ lote.lote_id }}" onclick="fill_calc_values({{ lote.area }},{{ lote.nfogos }},
+          {{ lote.frenteslote }})">Lote nº {{ lote.nlote }}</option>
+{% endfor %}

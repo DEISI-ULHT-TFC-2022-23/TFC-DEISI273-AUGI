@@ -1,0 +1,53 @@
+{% extends 'gestaugi/base.html' %}
+  {% load static %}
+
+   {% block main %}
+       <style>
+         .dropdown { display: inline-block; }
+       </style>
+       {% block title %} <h4> Relatórios Sócios </h4> {% endblock %}
+       <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Lista Sócios <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="/listpartners2pdf">PDF</a></li>
+            <li><a href="/listpartners2csv">CSV</a></li>
+          </ul>
+       </div>
+       <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Valores Divida <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="/listdebts2pdf">PDF</a></li>
+            <li><a href="/listdebts2csv">CSV</a></li>
+          </ul>
+       </div>
+       <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Comparticipações <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="/listcomparts2pdf">PDF</a></li>
+            <li><a href="/listcomparts2csv">CSV</a></li>
+          </ul>
+       </div>
+       <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Pagamentos <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="/listpayments2pdf">PDF</a></li>
+            <li><a href="/listpayments2csv">CSV</a></li>
+          </ul>
+       </div>
+       <h4> Relatórios Despesas </h4>
+       <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Despesas Ano  <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="/listexpenses2pdf">PDF</a></li>
+            <li><a href="/listexpenses2csv">CSV</a></li>
+          </ul>
+       </div>
+       <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Despesas Totais <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="/listotexpenses2pdf">PDF</a></li>
+            <li><a href="/listotexpenses2csv">CSV</a></li>
+          </ul>
+       </div>
+       <button class="btn btn-primary" type="button" onclick="location.href='/dashboard'" > Despesas por Tipo </button>
+    {% endblock %}

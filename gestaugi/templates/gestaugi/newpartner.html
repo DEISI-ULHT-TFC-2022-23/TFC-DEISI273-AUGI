@@ -1,0 +1,79 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <style>
+      label { white-space: nowrap; }
+      div { display: flow-root;}
+      .col-md-2 {padding: 3px}
+      .col-md-3 {padding: 3px}
+      .col-md-4 {padding: 3px}
+      .col-md-5 {padding: 3px}
+      .col-md-6 {padding: 3px}
+    </style>
+  {% block title %} <h4> Novo Sócio </h4> {% endblock %}
+  <form action = "" method = "POST" class = "editform">
+      {% csrf_token %}
+      <fieldset class="fs-box-shadow">
+          <div class="form-group-sm">
+               <div class="col-sm-12">
+                    {#{{ form|crispy }}#}
+                    <div class="form-row">
+                      <div class="form-group col-md-2 mb-0">
+                        {{ form.nsocio|as_crispy_field }}
+                      </div>
+                      <div class="form-group col-md-5 mb-0">
+                        {{ form.nome|as_crispy_field }}
+                      </div>
+                        <div class="form-group col-md-2 mb-0">
+                          {{ form.estado|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3 mb-0">
+                          {{ form.dt_admissao|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6 mb-0">
+                          {{ form.morada|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-6 mb-0">
+                           {{ form.localidade|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3 mb-0">
+                           {{ form.cpostal|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-6 mb-0">
+                           {{ form.cpostlocal|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3 mb-0">
+                          {{ form.telemovel|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.email|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.lotes|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-2 mb-0">
+                          {{ form.compdivida|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-2 mb-0">
+                          {{ form.anuidivida|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                       <div class="form-group col-md-6 mb-0">
+                          <button type="submit" class="btn btn-primary"> Confirmar </button>
+                          <button class="btn btn-info" type="button" onclick="location.href='/partners'" > Cancelar </button>
+                       </div>
+                    </div>
+              </div>
+          </div>
+      </fieldset>
+  </form>
+{% endblock %}
+

@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <style>
+            * {
+                font-size: 10px;
+            }
+            table {
+                table-layout: fixed;
+                width: 100%;
+                border: 1px solid black;
+            }
+            table th {
+                text-align: left;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+            table td {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+            @page {
+                size: letter landscape;
+                margin: 1cm;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1> Despesas Totais </h1>
+        <table>
+            <tr>
+                <th> Descrição </th>
+                <th> Despesa </th>
+            </tr>
+            {%for data in record%}
+            <tr>
+                {% if data.descricao == 'Total'  %}
+                    <td style="width: 60%; text-align: left;font-size: x-large"> {{data.descricao |title}} </td>
+                    <td style="width: 40%;font-size: x-large"> {{data.despesa}} </td>
+                {% else  %}
+                    <td style="width: 60%; text-align: left;"> {{data.descricao |title}} </td>
+                    <td style="width: 40%;"> {{data.despesa}} </td>
+                {% endif  %}
+            </tr>
+            {%endfor%}
+        </table>
+    </body>
+</html>

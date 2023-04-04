@@ -1,0 +1,32 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <style>
+      .select-box {width: 460px;}
+      label { white-space: nowrap; }
+      div { display: flow-root;}
+    </style>
+  {% block title %} <h4> Novo Tipo Despesa </h4> {% endblock %}
+  <form action = "" method = "POST" class = "editform">
+      {% csrf_token %}
+      <fieldset class="fs-box-shadow">
+          <div class="form-group-sm">
+               <div class="col-sm-12">
+                    {#{{ form|crispy }}#}
+                    <div class="form-row">
+                        <div class="form-group col-md-12 mb-0">
+                           {{ form.descricao|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                       <div class="form-group col-md-8 mb-0">
+                          <button type="submit" class="btn btn-primary"> Confirmar </button>
+                          <button class="btn btn-info" type="button" onclick="location.href='/expensestypes'" > Cancelar </button>
+                       </div>
+                    </div>
+               </div>
+          </div>
+      </fieldset>
+  </form>
+{% endblock %}

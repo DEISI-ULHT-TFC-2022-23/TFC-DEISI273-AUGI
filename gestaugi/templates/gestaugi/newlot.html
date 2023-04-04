@@ -1,0 +1,67 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <style>
+      label { white-space: nowrap; }
+      div { display: flow-root;}
+    </style>
+  {% block title %} <h4> Novo Lote </h4> {% endblock %}
+  <form action = "" method = "POST" class = "editform">
+      {% csrf_token %}
+      <fieldset class="fs-box-shadow">
+          <div class="form-group-sm">
+               <div class="col-sm-12">
+                    {#{{ form|crispy }}#}
+                    <div class="form-row">
+                        <div class="form-group col-md-8 mb-0">
+                              <div>
+                                <label>Sócio</label>
+                              </div>
+                              <select class="select-box" name="socio">
+                                  <option selected>Escolha sócio...</option>
+                                  {% for nome in socios %}
+                                      <option value="{{ nome.socio_id }}">{{ nome.nome }} - Sócio nº {{ nome.nsocio }}</option>
+                                  {% endfor %}
+                              </select>
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                            {{ form.nlote|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8 mb-0">
+                          {{ form.local|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                            {{ form.area|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                           {{ form.dt_aquisicao|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                           {{ form.dt_venda|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3 mb-0">
+                          {{ form.nfogos|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3 mb-0">
+                          {{ form.frenteslote|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                       <div class="form-group col-md-6 mb-0">
+                          <button type="submit" class="btn btn-primary"> Confirmar </button>
+                          <button class="btn btn-info" type="button" onclick="location.href='/lots'" > Cancelar </button>
+                       </div>
+                    </div>
+               </div>
+          </div>
+      </fieldset>
+  </form>
+
+{% endblock %}

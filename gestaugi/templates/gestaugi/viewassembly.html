@@ -1,0 +1,60 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <style>
+      label { white-space: nowrap; }
+      div { display: flow-root;}
+    </style>
+  {% block title %} <h4> Consulta Assembleia nº {{ assembleia }}</h4> {% endblock %}
+  <form action = "" method = "" class = "editform">
+      {% csrf_token %}
+      <fieldset class="fs-box-shadow">
+          <div class="form-group-sm">
+               <div class="col-sm-12">
+                    {#{{ form|crispy }}#}
+                    <div class="form-row">
+                       <div class="form-group col-md-4 mb-0">
+                          {{ form.tipo|as_crispy_field }}
+                       </div>
+                       <div class="form-group col-md-4 mb-0">
+                          {{ form.orgao|as_crispy_field }}
+                       </div>
+                        <div class="form-group col-md-4 mb-0">
+                           {{ form.dt_assembleia|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.cpostal|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-8 mb-0">
+                           {{ form.localidade|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.convocados|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.presencas|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.rep_total|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.rep_assembl|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                       <div class="form-group col-md-6 mb-0">
+                          <button class="btn btn-primary" type="button" onclick="location.href='/assembly'" > Voltar </button>
+                       </div>
+                    </div>
+              </div>
+          </div>
+      </fieldset>
+  </form>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title> AUGI  </title>
+    <meta name="author" content="">
+    <meta name="keywords" content="Augi">
+    <meta name="description" content="Website Gestão AUGI">
+    <meta name=”viewport” content=”width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes″>
+    {% load static %}
+      <link rel="shortcut icon" type="image/x-icon"  href="{% static 'gestaugi/images/ga.ico' %}"/>
+      <link rel="stylesheet" type="text/css" href="{% static 'gestaugi/css/bootstrap.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'gestaugi/css/gastyles.css' %}">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    {% block head %}
+    {% endblock head %}
+
+  </head>
+  <body>
+    <script src="{% static 'gestaugi/js/jquery.min.js' %}"></script>
+    <script src="{% static 'gestaugi/js/bootstrap.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+    <header class="header">
+       {% include 'gestaugi/header.html' %}
+    </header>
+
+    <nav>
+        {% include 'gestaugi/menu.html' %}
+    </nav>
+
+    <main>
+       {% block main %}
+       {% endblock main %}
+    </main>
+  </body>
+</html>

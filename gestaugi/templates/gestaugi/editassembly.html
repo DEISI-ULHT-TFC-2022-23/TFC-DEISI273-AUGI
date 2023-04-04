@@ -1,0 +1,92 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block main %}
+    <style>
+      label { white-space: nowrap; }
+      div { display: flow-root;}
+    </style>
+  {% block title %} <h4> Edita Assembleia nº {{ assembleia }} </h4> {% endblock %}
+  <form action = "" method = "POST" class = "editform">
+      {% csrf_token %}
+      <fieldset class="fs-box-shadow">
+          <div class="form-group-sm">
+               <div class="col-sm-12">
+                    {#{{ form|crispy }}#}
+                    <div class="form-row">
+                       <div class="form-group col-md-4 mb-0">
+                          {{ form.tipo|as_crispy_field }}
+                       </div>
+                       <div class="form-group col-md-4 mb-0">
+                          {{ form.orgao|as_crispy_field }}
+                       </div>
+                        <div class="form-group col-md-4 mb-0">
+                           {{ form.dt_assembleia|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.cpostal|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-8 mb-0">
+                           {{ form.localidade|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.convocados|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.presencas|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.rep_total|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0">
+                          {{ form.rep_assembl|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-4 mb-0" style="display: none">
+                          {{ form.rep_socios|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                       <div class="form-group col-md-6 mb-0">
+                          <button type="submit" class="btn btn-primary"> Confirmar </button>
+                          <button class="btn btn-info" type="button" onclick="location.href='/assembly'" > Cancelar </button>
+                       </div>
+                       <div class="form-group col-md-6 mb-0">
+                            <button class="btn btn-danger delete_record" type="button" data-target="#delete-item-modal"
+                             data-toggle="modal"  onclick="delete_item(this)"> Suprimir </button>
+                       </div>
+                    </div>
+              </div>
+          </div>
+      </fieldset>
+  </form>
+  {% block modalcontent %}
+    <div class="modal fade" id="delete-item-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Confirma a supressão da Assembleia nº {{ assembleia }} ? </p>
+                </div>
+                <div class="justify-content mb-2 mr-2 text-right" style="padding: 2px">
+                    <form method="post" id="item-delete-form">
+                        <button type="button" class="btn btn-info mr-1" data-dismiss="modal">Cancelar</button>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" id="confirm-delete">Suprimir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  {% endblock %}
+    <script>
+        function delete_item(selected){
+                document.getElementById("item-delete-form").action = '/deleteassembly/{{ assembleia }}'
+        }
+    </script>
+{% endblock %}
+
