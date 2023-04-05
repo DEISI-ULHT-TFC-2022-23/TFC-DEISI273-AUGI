@@ -166,10 +166,16 @@ def newcoparticipation(request):
 	socios = Socios.objects.all().values('socio_id','nsocio','nome').order_by('nome')
 	#Parametros - Valores totais para calculo da comparticipação
 	param = Parametros.objects.all().filter(pk=1).values('vtotobra','tfrenlot','tfoglot','tarealot')
-	vtotobra = param[0]['vtotobra']
-	tfrenlot = param[0]['tfrenlot']
-	tfoglot = param[0]['tfoglot']
-	tarealot = param[0]['tarealot']
+	if param.count() > 0:
+		vtotobra = param[0]['vtotobra']
+		tfrenlot = param[0]['tfrenlot']
+		tfoglot = param[0]['tfoglot']
+		tarealot = param[0]['tarealot']
+	else:
+		vtotobra = 0
+		tfrenlot = 0
+		tfoglot = 0
+		tarealot = 0
 	#Lista de lotes para escolha, inclui socios
 	lotes = Lotes.objects.all()
 	form = CompartForm(request.POST or None,initial={"dt_registo": datetime.date.today(),
