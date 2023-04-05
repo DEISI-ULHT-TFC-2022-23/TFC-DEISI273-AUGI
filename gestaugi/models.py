@@ -5,10 +5,8 @@ from django.db import models
 class CodPostais(models.Model):
     codpostal = models.CharField(primary_key=True,max_length=10,verbose_name="Cod.Postal")
     localidade = models.CharField(max_length=50,verbose_name="Localidade")
-
     def __str__(self):
         return f"{self.codpostal}"
-
 class Socios(models.Model):
     socio_id = models.AutoField(primary_key=True,verbose_name="ID")
     nsocio = models.IntegerField(default=0,unique=True, verbose_name="NºSócio")
