@@ -12,6 +12,7 @@ psycopg2-binary = "==2.9.6"
 django-tables2 = "*"
 django-filter = "*"
 crispy-bootstrap4 = "*"
+xhtml2pdf = "*"
 
 [dev-packages]
 
