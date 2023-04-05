@@ -30,15 +30,15 @@ sql_debts2 = "select gs.socio_id, gs.nsocio ,gs.nome, gs.lotes , gs.anuidivida ,
             order by gs.nsocio"
 
 sql_expenses = "select ano, despesa, dt_registo,descricao, despesa_id from ( \
-                select '1' coluna, despesa_id, ano sep,'Ano ' || ano as ano, despesa, dt_registo, gt.descricao \
+                select '1' coluna, despesa_id, ano sep,'' || ano as ano, despesa, dt_registo, gt.descricao \
                 from gestaugi_despesas gd \
                 inner join gestaugi_tiposdespesas gt on (gt.tipo_id = gd.tipo_id) \
                 union \
-                select '2' coluna,sum(despesa_id), ano sep, 'Subtotal ' || ano as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
+                select '2' coluna,sum(despesa_id), ano sep, 'Subtotal ' || ano as ano, sum(despesa) as despesa, NULL as dt_registo, '' as descricao \
                 from gestaugi_despesas gd \
                 group by ano \
                 union \
-                select '99' coluna, sum(despesa_id), 9999 sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
+                select '99' coluna, sum(despesa_id), 9999 sep, 'Total' as ano, sum(despesa) as despesa, NULL as dt_registo, '' as descricao \
                 from gestaugi_despesas gd) \
                 as res order by case when coluna =99 then 1 else 0 end, sep, coluna"
 
