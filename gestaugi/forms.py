@@ -19,9 +19,8 @@ ASSEMBLY_TYPE_CHOICES = [
     ]
 
 PAYMENT_TYPE_CHOICES = [
-    ('Despesa', 'Despesa'),
-    ('Comparticipação', 'Comparticipação'),
     ('Anuidade', 'Anuidade'),
+    ('Comparticipação', 'Comparticipação'),
 ]
 
 # cria o form baseado no modelo
