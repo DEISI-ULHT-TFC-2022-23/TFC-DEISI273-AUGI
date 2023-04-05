@@ -10,10 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
 from environs import Env
 env = Env()
 env.read_env()
+
+from pathlib import Path
+import os
 
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
@@ -106,9 +108,6 @@ DATABASES = {
     "default": env.dj_db_url("DATABASE_URL")
 }
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -150,7 +149,7 @@ SHORT_DATE_FORMAT = 'd/m/Y'   # Formato para os tabelas
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [str(BASE_DIR.joinpath('gestaugi/static'))]
-STATIC_ROOT = str(BASE_DIR.joinpath('static'))
+STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles'))
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
