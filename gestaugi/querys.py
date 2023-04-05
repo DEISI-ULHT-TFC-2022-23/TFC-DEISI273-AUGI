@@ -30,7 +30,7 @@ sql_debts2 = "select gs.socio_id, gs.nsocio ,gs.nome, gs.lotes , gs.anuidivida ,
             order by gs.nsocio"
 
 sql_expenses = "select ano, despesa, dt_registo,descricao, despesa_id from ( \
-                select '1' coluna, despesa_id, ano sep,ano, despesa, dt_registo, gt.descricao \
+                select '1' coluna, despesa_id, ano sep,'Ano ' || ano as ano, despesa, dt_registo, gt.descricao \
                 from gestaugi_despesas gd \
                 inner join gestaugi_tiposdespesas gt on (gt.tipo_id = gd.tipo_id) \
                 union \
