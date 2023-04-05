@@ -7,7 +7,7 @@ class CodPostais(models.Model):
     localidade = models.CharField(max_length=50,verbose_name="Localidade")
 
     def __str__(self):
-        return f"{self.id_cpost}"
+        return f"{self.codpostal}"
 
 class Socios(models.Model):
     socio_id = models.AutoField(primary_key=True,verbose_name="ID")
