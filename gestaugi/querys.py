@@ -30,15 +30,15 @@ sql_debts2 = "select gs.socio_id, gs.nsocio ,gs.nome, gs.lotes , gs.anuidivida ,
             order by gs.nsocio"
 
 sql_expenses = "select ano, despesa, dt_registo,descricao, despesa_id from ( \
-                select '1' coluna, ano sep,ano, despesa, dt_registo, gt.descricao, despesa_id \
+                select '1' coluna, despesa_id, ano sep,ano, despesa, dt_registo, gt.descricao \
                 from gestaugi_despesas gd \
                 inner join gestaugi_tiposdespesas gt on (gt.tipo_id = gd.tipo_id) \
                 union \
-                select '2' coluna,ano sep, 'Subtotal ' || ano as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao, sum(despesa_id) \
+                select '2' coluna,sum(despesa_id), ano sep, 'Subtotal ' || ano as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
                 from gestaugi_despesas gd \
                 group by ano \
                 union \
-                select '99' coluna,'_' sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao, sum(despesa_id) \
+                select '99' coluna, sum(despesa_id), '_' sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
                 from gestaugi_despesas gd) \
                 as res order by case when coluna =99 then 1 else 0 end, sep, coluna"
 
@@ -48,7 +48,7 @@ sql_totexpenses = "select despesa_id, descricao, despesa from ( \
                    inner join gestaugi_tiposdespesas gt on (gt.tipo_id = gd.tipo_id) \
                    GROUP by gd.despesa_id, gt.descricao \
                    union ALL \
-                   select '99' coluna, gd.despesa_id, 'Total' as descricao, sum(gd.despesa) \
+                   select '99' coluna, sum(gd.despesa_id), 'Total' as descricao, sum(gd.despesa) \
                    from gestaugi_despesas gd) as despesas \
                    ORDER by coluna"
 
