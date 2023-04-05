@@ -38,7 +38,7 @@ sql_expenses = "select ano, despesa, dt_registo,descricao, despesa_id from ( \
                 from gestaugi_despesas gd \
                 group by ano \
                 union \
-                select '99' coluna, sum(despesa_id), '_' sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
+                select '99' coluna, sum(despesa_id), 9999 sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
                 from gestaugi_despesas gd) \
                 as res order by case when coluna =99 then 1 else 0 end, sep, coluna"
 
