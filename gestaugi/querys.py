@@ -40,7 +40,7 @@ sql_expenses = "select ano, despesa, dt_registo,descricao, despesa_id from ( \
                 union \
                 select '99' coluna, sum(despesa_id), 9999 sep, 'Total' as ano, sum(despesa) as despesa, NULL as dt_registo, '' as descricao \
                 from gestaugi_despesas gd) \
-                as res order by case when coluna =99 then 1 else 0 end, sep, coluna"
+                as res order by case when coluna ='99' then 1 else 0 end, sep, coluna"
 
 sql_totexpenses = "select despesa_id, descricao, despesa from ( \
                    select '1' coluna, gd.despesa_id,gt.descricao, sum(gd.despesa) as despesa \
