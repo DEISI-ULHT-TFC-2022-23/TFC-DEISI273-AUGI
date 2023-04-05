@@ -1,1 +1,1 @@
-web: gunicorn config.wsgi:gaugi --log-file -
+web: gunicorn config.wsgi --log-file -
