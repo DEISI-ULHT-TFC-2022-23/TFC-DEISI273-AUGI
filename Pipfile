@@ -10,6 +10,8 @@ whitenoise = "==5.1.0"
 gunicorn = "==19.9.0"
 psycopg2-binary = "==2.9.6"
 django-tables2 = "*"
+django-filter = "*"
+crispy-bootstrap4 = "*"
 
 [dev-packages]
 
