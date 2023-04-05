@@ -34,11 +34,11 @@ sql_expenses = "select despesa_id, ano, despesa, dt_registo,descricao from ( \
                 from gestaugi_despesas gd \
                 inner join gestaugi_tiposdespesas gt on (gt.tipo_id = gd.tipo_id) \
                 union \
-                select '2' coluna,sum(despesa_id),ano sep, 'Subtotal ' || ano as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
+                select '2' coluna,sum(despesa_id) as despesa_id,ano sep, 'Subtotal ' || ano as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
                 from gestaugi_despesas gd \
                 group by ano \
                 union \
-                select '99' coluna,sum(despesa_id),'_' sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
+                select '99' coluna,sum(despesa_id) as despesa_id,'_' sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao \
                 from gestaugi_despesas gd) \
                 as res order by case when coluna =99 then 1 else 0 end, sep, coluna"
 
@@ -46,7 +46,7 @@ sql_totexpenses = "select despesa_id, descricao, despesa from ( \
                    select '1' coluna, gd.despesa_id,gt.descricao, sum(gd.despesa) as despesa \
                    from gestaugi_despesas gd \
                    inner join gestaugi_tiposdespesas gt on (gt.tipo_id = gd.tipo_id) \
-                   GROUP by gt.descricao \
+                   GROUP by gd.despesa_id, gt.descricao \
                    union ALL \
                    select '99' coluna, gd.despesa_id, 'Total' as descricao, sum(gd.despesa) \
                    from gestaugi_despesas gd) as despesas \
