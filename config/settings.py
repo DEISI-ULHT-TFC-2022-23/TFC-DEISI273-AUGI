@@ -104,16 +104,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     "default": env.dj_db_url("DATABASE_URL")
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+    "default": env.dj_db_url("DATABASE_URL")
 }
 
 db_from_env = dj_database_url.config(conn_max_age=500)
