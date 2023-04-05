@@ -34,11 +34,11 @@ sql_expenses = "select ano, despesa, dt_registo,descricao, despesa_id from ( \
                 from gestaugi_despesas gd \
                 inner join gestaugi_tiposdespesas gt on (gt.tipo_id = gd.tipo_id) \
                 union \
-                select '2' coluna,ano sep, 'Subtotal ' || ano as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao, despesa_id \
+                select '2' coluna,ano sep, 'Subtotal ' || ano as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao, sum(despesa_id) \
                 from gestaugi_despesas gd \
                 group by ano \
                 union \
-                select '99' coluna,'_' sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao, despesa_id \
+                select '99' coluna,'_' sep, 'Total' as ano, sum(despesa) as despesa, '' as dt_registo, '' as descricao, sum(despesa_id) \
                 from gestaugi_despesas gd) \
                 as res order by case when coluna =99 then 1 else 0 end, sep, coluna"
 
