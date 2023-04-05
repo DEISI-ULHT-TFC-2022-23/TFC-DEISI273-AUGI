@@ -55,5 +55,5 @@ sql_totexpenses = "select despesa_id, descricao, despesa from ( \
 sql_areas = "select gs.socio_id, gs.nsocio, gs.nome, sum(area) as area \
              from gestaugi_socios gs \
              left outer join gestaugi_lotes gl on (gl.socio_id=gs.socio_id) \
-             group by gs.nsocio \
+             group by gs.socio_id,gs.nsocio \
              order by gs.nome"
