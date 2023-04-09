@@ -1,14 +1,96 @@
   <section class="navmenu">
-    <ul>
-    <li><span> <a href="{% url 'gestaugi:partners' %}"><i class="material-icons">group</i><b>Sócios</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:lots' %}"><i class="material-icons">dashboard</i><b>Lotes</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:coparticipation' %}"><i class="material-icons">calculate</i><b>Comparticipações</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:annuities' %}"><i class="material-icons">credit_card</i><b>Anuidades</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:payments' %}"><i class="material-icons">payments</i><b>Pagamentos</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:assembly' %}"><i class="material-icons">diversity_3</i><b>Assembleias</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:attendance' %}"><i class="material-icons">co_present</i><b>Presenças</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:expenses' %}"><i class="material-icons">euro_symbol</i><b>Despesas</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:reports' %}"><i class="material-icons">article</i><b>Relatórios</b></a></span> </li>
-    <li><span> <a href="{% url 'gestaugi:settings' %}"><i class="material-icons">settings_applications</i><b>Tabelas</b></a></span> </li>
-    </ul>
+    <div id="menu">
+        <ul>
+        <li><span> <a href="{% url 'gestaugi:home' %}" onclick="gamenu()"><i class="material-icons">hdr_auto</i><b>Administração Augi</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:home' %}" onclick="divmenu()"><i class="material-icons">info</i><b>Divulgação</b></a></span> </li>
+        <li style="visibility: hidden"><span> <i class="material-icons">calculate</i><b></b></span> </li>
+        <li style="visibility: hidden"><span> <i class="material-icons">credit_card</i><b></b></span> </li>
+        <li style="visibility: hidden"><span> <i class="material-icons">payments</i><b></b></span> </li>
+        <li style="visibility: hidden"><span> <i class="material-icons">diversity_3</i><b></b></span> </li>
+        <li style="visibility: hidden"><span> <i class="material-icons">co_present</i><b></b></span> </li>
+        <li style="visibility: hidden"><span> <i class="material-icons">euro_symbol</i><b></b></span> </li>
+        <li style="visibility: hidden"><span> <i class="material-icons">article</i><b></b></span> </li>
+        <li style="visibility: hidden"><span> <i class="material-icons">settings_applications</i><b></b></span> </li>
+        </ul>
+    </div>
+    <div id="gaMenu">
+        <ul>
+        <li><span> <a href="{% url 'gestaugi:home' %}" onclick="remlocalstorage()"><i class="material-icons">home</i><b>Inicio</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:partners' %}"><i class="material-icons">group</i><b>Sócios</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:lots' %}"><i class="material-icons">dashboard</i><b>Lotes</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:coparticipation' %}"><i class="material-icons">calculate</i><b>Comparticipações</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:annuities' %}"><i class="material-icons">credit_card</i><b>Anuidades</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:payments' %}"><i class="material-icons">payments</i><b>Pagamentos</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:assembly' %}"><i class="material-icons">diversity_3</i><b>Assembleias</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:attendance' %}"><i class="material-icons">co_present</i><b>Presenças</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:expenses' %}"><i class="material-icons">euro_symbol</i><b>Despesas</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:reports' %}"><i class="material-icons">article</i><b>Relatórios / Tabelas</b></a></span> </li>
+    {#  <li><span> <a href="{% url 'gestaugi:settings' %}"><i class="material-icons">settings_applications</i><b>Tabelas</b></a></span> </li>#}
+        </ul>
+    </div>
+    <div id="divMenu">
+        <ul>
+        <li><span> <a href="{% url 'gestaugi:home' %}" onclick="remlocalstorage()"><i class="material-icons">home</i><b>Inicio</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:divdashboard' %}"><i class="material-icons">leaderboard</i><b>Augis na AML</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:divdashboard2' %}"><i class="material-icons">leaderboard</i><b>Augis em reconversão</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:divdashboard3' %}"><i class="material-icons">leaderboard</i><b>Área Total</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:divdashboard4' %}"><i class="material-icons">donut_small</i><b>Área Média</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:divdashboard5' %}"><i class="material-icons">donut_small</i><b>Maiores Augis</b></a></span> </li>
+        <li style="visibility: hidden"><span> <a href="{% url 'gestaugi:assembly' %}"><i class="material-icons">diversity_3</i><b>Assembleias</b></a></span> </li>
+        <li style="visibility: hidden"><span> <a href="{% url 'gestaugi:attendance' %}"><i class="material-icons">co_present</i><b>Presenças</b></a></span> </li>
+        <li style="visibility: hidden"><span> <a href="{% url 'gestaugi:expenses' %}"><i class="material-icons">euro_symbol</i><b>Despesas</b></a></span> </li>
+        <li style="visibility: hidden"><span> <a href="{% url 'gestaugi:reports' %}"><i class="material-icons">article</i><b>Relatórios</b></a></span> </li>
+        </ul>
+    </div>
+    <script>
+          var mn = document.getElementById("menu");
+          var gamn = document.getElementById("gaMenu");
+          var divmn = document.getElementById("divMenu");
+          if (localStorage.getItem('gamenu')) {
+              gamn.style.display = 'block';
+              divmn.style.display = 'none' ;
+              mn.style.display = 'none' ;
+          } else if (localStorage.getItem('divmenu')) {
+              divmn.style.display = 'block';
+              gamn.style.display = 'none';
+              mn.style.display = 'none' ;
+          } else {
+              gamn.style.display = 'none';
+              divmn.style.display = 'none';
+              mn.style.display = 'block' ;
+          }
+          function gamenu() {
+              if(window.getComputedStyle(gamn).display == "none"){
+                 gamn.style.display = 'block';
+                 divmn.style.display = 'none';
+                 mn.style.display = 'none' ;
+                 localStorage.setItem('gamenu', true);
+                 localStorage.removeItem('divmenu');
+              } else {
+                 gamn.style.display = 'none';
+                 divmn.style.display = 'none';
+                 mn.style.display = 'block' ;
+                 localStorage.removeItem('gamenu');
+              }
+          }
+          function divmenu() {
+              if(window.getComputedStyle(divmn).display == "none"){
+                 divmn.style.display = 'block';
+                 gamn.style.display = 'none';
+                 mn.style.display = 'none' ;
+                 localStorage.setItem('divmenu', true);
+                 localStorage.removeItem('gamenu');
+              } else {
+                 gamn.style.display = 'none';
+                 divmn.style.display = 'none';
+                 mn.style.display = 'block' ;
+                 localStorage.removeItem('divmenu');
+              }
+          }
+          // se menu ativo for da Gestão Augi ou da Divulgação limpa para voltar ao menu inicial
+          function remlocalstorage() {
+              localStorage.removeItem('gamenu');
+              localStorage.removeItem('divmenu');
+          }
+    </script>
   </section>

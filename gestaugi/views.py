@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Socios, Lotes, Comparticipacoes, Assembleias, Presencas, Despesas, Anuidades, Pagamentos, TiposDespesas, Parametros
+from .models import Socios, Lotes, Comparticipacoes, Assembleias, Presencas, Despesas, Anuidades, Pagamentos, TiposDespesas, Parametros, AugiDashboard
 from django.db.models import Sum
 from .forms import SocioForm, SocioViewForm, LoteForm, LoteViewForm, CompartForm, CompartViewForm, AssembleiaForm
 from .forms import AssembleiaViewForm, PresencaForm, PresencaViewForm, DespesasForm, DespesasViewForm, AnuidadesForm
@@ -935,3 +935,83 @@ def parameters_page_view(request):
 	table.paginate(page=request.GET.get("page", 1), per_page=10)
 	return render(request, 'gestaugi/parameters.html',
 				  context={"table":table})
+
+def divdashboard_page_view(request):
+	return render(request, 'gestaugi/divdashboard.html')
+
+def infodashboard(request):
+	labels = []
+	data = []
+	queryset = AugiDashboard.objects.values('municipio').annotate(numero=Sum('numero')).order_by('-numero')
+	for entry in queryset:
+		labels.append(entry['municipio'])
+		data.append(entry['numero'])
+
+	return JsonResponse(data={
+		'labels': labels,
+		'data': data,
+	})
+
+def divdashboard2_page_view(request):
+	return render(request, 'gestaugi/divdashboard2.html')
+
+def infodashboard2(request):
+	labels = []
+	data = []
+	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(reconversao=Sum('reconversao')).order_by('-reconversao')
+	for entry in queryset:
+		labels.append(entry['municipio'])
+		data.append(entry['reconversao'])
+
+	return JsonResponse(data={
+		'labels': labels,
+		'data': data,
+	})
+
+def divdashboard3_page_view(request):
+	return render(request, 'gestaugi/divdashboard3.html')
+
+def infodashboard3(request):
+	labels = []
+	data = []
+	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(area_total=Sum('area_total')).order_by('-area_total')
+	for entry in queryset:
+		labels.append(entry['municipio'])
+		data.append(entry['area_total'])
+
+	return JsonResponse(data={
+		'labels': labels,
+		'data': data,
+	})
+
+def divdashboard4_page_view(request):
+	return render(request, 'gestaugi/divdashboard4.html')
+
+def infodashboard4(request):
+	labels = []
+	data = []
+	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(area_media=Sum('area_media')).order_by('area_media')
+	for entry in queryset:
+		labels.append(entry['municipio'])
+		data.append(entry['area_media'])
+
+	return JsonResponse(data={
+		'labels': labels,
+		'data': data,
+	})
+
+def divdashboard5_page_view(request):
+	return render(request, 'gestaugi/divdashboard5.html')
+
+def infodashboard5(request):
+	labels = []
+	data = []
+	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(augi_maior=Sum('augi_maior'))
+	for entry in queryset:
+		labels.append(entry['municipio'])
+		data.append(entry['augi_maior'])
+
+	return JsonResponse(data={
+		'labels': labels,
+		'data': data,
+	})

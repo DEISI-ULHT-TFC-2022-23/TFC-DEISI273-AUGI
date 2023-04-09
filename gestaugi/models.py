@@ -133,3 +133,16 @@ class Parametros(models.Model):
 
     def __str__(self):
         return f"{self.param_id}"
+
+class AugiDashboard(models.Model):
+    reg_id = models.AutoField(primary_key=True,verbose_name="Id.Registo")
+    numero = models.IntegerField(default=0, verbose_name="Numero")
+    municipio = models.CharField(max_length=50,verbose_name="Municipio")
+    reconversao = models.IntegerField(default=0, verbose_name="Reconversão")
+    area_total = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Área Total")
+    area_media = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Área Média")
+    augi_menor = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Augi Menor")
+    augi_maior = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Augi Maior")
+
+    def __str__(self):
+        return f"{self.reg_id}"

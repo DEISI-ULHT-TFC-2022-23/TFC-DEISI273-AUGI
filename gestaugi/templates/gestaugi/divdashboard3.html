@@ -1,0 +1,53 @@
+{% extends 'gestaugi/base.html' %}
+
+{% block main %}
+
+  <div id="container" style="width: 75%;">
+    <canvas id="infodashboard3" data-url="{% url 'gestaugi:infodashboard3' %}"></canvas>
+  </div>
+
+  <script>
+     Chart.register(ChartDataLabels);
+     Chart.defaults.set('plugins.datalabels', {
+       color: 'black'
+     });
+
+    $(function () {
+
+      var $populationChart = $("#infodashboard3");
+      $.ajax({
+        url: $populationChart.data("url"),
+        success: function (data) {
+
+          var ctx = $populationChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                backgroundColor: [
+                  'red','blue','green','steelblue','yellow','cyan','darkblue','lightgreen','darkorange',
+                  'forestgreen','orchid','salmon','turquoise','gold','aquamarine','coral','azure','deepskyblue'
+                ],
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                 legend: {
+                     display: false,
+                 },
+                 title: {
+                  display: true,
+                  text: 'Área Total das Augis da AML em reconversão - em hectares (Relatório DGT 2020)'                 }
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+{% endblock %}ml>

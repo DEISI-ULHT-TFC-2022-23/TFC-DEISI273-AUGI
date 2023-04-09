@@ -1,0 +1,55 @@
+{% extends 'gestaugi/base.html' %}
+
+{% block main %}
+
+  <div id="container" style="width: 75%;">
+    <canvas id="infodashboard" data-url="{% url 'gestaugi:infodashboard' %}"></canvas>
+  </div>
+
+  <script>
+     Chart.register(ChartDataLabels);
+     Chart.defaults.set('plugins.datalabels', {
+       color: 'black'
+     });
+
+    $(function () {
+
+      var $populationChart = $("#infodashboard");
+      $.ajax({
+        url: $populationChart.data("url"),
+        success: function (data) {
+
+          var ctx = $populationChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              title: "AUGI" ,
+              labels: data.labels,
+              datasets: [{
+                backgroundColor: [
+                  'red','blue','green','steelblue','yellow','cyan','darkblue','lightgreen','darkorange',
+                  'forestgreen','orchid','salmon','turquoise','gold','aquamarine','coral','azure','deepskyblue'
+                ],
+                data: data.data,
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                 legend: {
+                     display: false,
+                 },
+                 title: {
+                  display: true,
+                   text: 'Nº Total de Augis da Aréa Metropolitana de Lisboa'
+                 }
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+{% endblock %}

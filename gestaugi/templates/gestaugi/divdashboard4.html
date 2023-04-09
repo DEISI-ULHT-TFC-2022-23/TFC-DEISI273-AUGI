@@ -1,0 +1,57 @@
+{% extends 'gestaugi/base.html' %}
+
+{% block main %}
+
+  <div id="container" style="width: 50%;">
+    <canvas id="infodashboard4" data-url="{% url 'gestaugi:infodashboard4' %}"></canvas>
+  </div>
+
+  <script>
+     Chart.register(ChartDataLabels);
+     Chart.defaults.set('plugins.datalabels', {
+       color: 'black'
+     });
+
+    $(function () {
+
+      var $populationChart = $("#infodashboard4");
+      $.ajax({
+        url: $populationChart.data("url"),
+        success: function (data) {
+
+          var ctx = $populationChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'polarArea',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                backgroundColor: [
+                  'red','blue','green','steelblue','yellow','cyan','darkblue','lightgreen','darkorange',
+                  'forestgreen','orchid','salmon','turquoise','gold','aquamarine','coral','azure','deepskyblue'
+                ],
+                data: data.data
+              }]
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              plugins: {
+                 legend: {
+                     display: true,
+                 },
+                 title: {
+                  display: true,
+                  text: 'Área Média (ha) das Augis da AML em reconversão - em hectares (Relatório DGT 2020)'
+                 }
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+{% endblock %}ml>

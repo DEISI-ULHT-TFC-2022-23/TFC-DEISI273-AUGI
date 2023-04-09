@@ -1,7 +1,10 @@
 <figure>
   {% load static %}
-    <img class="imghead" src="{% static 'gestaugi/images/GA Logo.png' %}" style="float: left; position: relative;margin-top: 1vh;">
-    <figcaption style="font-size: 2.5vw;position:absolute;margin-left: 17vw;margin-top: 5vh;">  Gestão AUGI </figcaption>
+    {# clicando no logo volta ao menu inicial#}
+    <a href="/." onclick="remlocalstorage()">
+    <img class="imghead" src="{% static 'gestaugi/images/AA Logo.png' %}" style="float: left; position: relative;margin-top: 1vh;">
+    </a>
+    <figcaption style="font-size: 2.5vw;position:absolute;margin-left: 17vw;margin-top: 5vh;">Administração AUGI </figcaption>
 </figure>
 <figure>
   <a href="https://www.ulusofona.pt/" target="_blank">
@@ -9,3 +12,10 @@
      <img class="imghead" src="{% static 'gestaugi/images/Ul.jpg' %}" style="float: left; position: relative;margin-top: 1vh;width: 12vw; height: 6vw; margin-left: 72vw; padding: 1px;border: 0px;">
   </a>
 </figure>
+<script>
+    // se menu ativo for da Gestão Augi ou da Divulgação limpa para voltar ao menu inicial
+    function remlocalstorage() {
+        localStorage.removeItem('gamenu');
+        localStorage.removeItem('divmenu');
+    }
+</script>

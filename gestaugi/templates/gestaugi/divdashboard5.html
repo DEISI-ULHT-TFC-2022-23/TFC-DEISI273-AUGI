@@ -1,0 +1,56 @@
+{% extends 'gestaugi/base.html' %}
+
+{% block main %}
+
+  <div id="container" style="width: 50%;">
+    <canvas id="infodashboard5" data-url="{% url 'gestaugi:infodashboard5' %}"></canvas>
+  </div>
+
+  <script>
+     Chart.register(ChartDataLabels);
+     Chart.defaults.set('plugins.datalabels', {
+       color: 'black'
+     });
+
+    $(function () {
+
+      var $populationChart = $("#infodashboard5");
+      $.ajax({
+        url: $populationChart.data("url"),
+        success: function (data) {
+
+          var ctx = $populationChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'polarArea',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                backgroundColor: [
+                  'red','blue','green','steelblue','yellow','cyan','darkblue','lightgreen','violet'
+                ],
+                data: data.data
+              }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                plugins: {
+                 legend: {
+                     display: true,
+                 },
+                 title: {
+                  display: true,
+                  text: 'Augi com maior dimensão por município - em hectares (Relatório DGT 2020)'
+                 }
+              }
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+{% endblock %}ml>

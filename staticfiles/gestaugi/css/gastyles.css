@@ -186,8 +186,7 @@ body>header  {
   display : block;
   padding : 0.2vw 0.5vw;
   margin : 0.5vw;
-  /*background-color : rgb(174,174,224); */
-  background-color: lightsteelblue;
+  background-color :rgb(172,202,228);
 }
 
 a {
