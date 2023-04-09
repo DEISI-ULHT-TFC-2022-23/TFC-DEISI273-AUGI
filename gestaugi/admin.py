@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Socios, Lotes, Comparticipacoes, Assembleias, Despesas, Anuidades, Pagamentos, Presencas, Parametros, CodPostais
+from .models import Socios, Lotes, Comparticipacoes, Assembleias, Despesas, Anuidades, Pagamentos, Presencas, Parametros, CodPostais, AugiDashboard
 
 # Register your models here.
 
@@ -13,3 +13,4 @@ admin.site.register(Parametros)
 admin.site.register(Anuidades)
 admin.site.register(CodPostais)
 admin.site.register(Presencas)
+admin.site.register(AugiDashboard)
