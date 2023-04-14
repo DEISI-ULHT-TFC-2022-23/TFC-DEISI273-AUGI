@@ -7,6 +7,10 @@
   </div>
 
   <script>
+    Chart.register(ChartDataLabels);
+    Chart.defaults.set('plugins.datalabels', {
+      color: 'black'
+    });
 
     $(function () {
 
@@ -23,20 +27,26 @@
               labels: data.labels,
               datasets: [{
                 label: 'Despesas',
-                backgroundColor: 'blue',
+                backgroundColor: [
+                  'red','blue','green','steelblue','yellow','cyan','darkblue','lightgreen','darkorange',
+                  'forestgreen','orchid','salmon','turquoise','gold','aquamarine','coral','azure','deepskyblue'
+                ],
                 data: data.data
               }]          
             },
             options: {
               responsive: true,
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true,
-                text: 'Despesas por tipo'
+              plugins: {
+                 legend: {
+                     display: false,
+                 },
+                 title: {
+                  display: true,
+                  text: 'Despesas por tipo'
+                 }
               }
             }
+
           });
         }
       });

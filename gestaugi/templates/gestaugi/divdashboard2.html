@@ -2,8 +2,19 @@
 
 {% block main %}
 
-  <div id="container" style="width: 75%;">
+  <div id="container" style="position: absolute; width: 70%;">
     <canvas id="infodashboard2" data-url="{% url 'gestaugi:infodashboard2' %}"></canvas>
+  </div>
+
+  <div id="texto" style="position: absolute; margin-left: 700px; margin-top: 50px; width: 20%;">
+    <dialog open style="inline-size: 250px;overflow-wrap: break-word;font-size: smaller; padding: 3px">
+        A DGT recolheu junto dos municípios do território continental informações
+        sobre a situação das AUGI. Esta recolha foi efetuada entre maio de
+        2018 e maio de 2019,num sistema de informação próprio da DGT.
+        A grande maioria dos municípios, no entanto não submeteram nenhuma
+        informação respeitante as suas AUGIs. Na zona da AML, aonde existem
+        1288 AUGIs, os municípios só relataram a situação de 435, 34% do total.
+    </dialog>
   </div>
 
   <script>

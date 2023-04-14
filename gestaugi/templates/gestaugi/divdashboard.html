@@ -2,8 +2,14 @@
 
 {% block main %}
 
-  <div id="container" style="width: 75%;">
+  <div id="container" style="position: absolute; width: 70%;">
     <canvas id="infodashboard" data-url="{% url 'gestaugi:infodashboard' %}"></canvas>
+  </div>
+
+  <div id="texto" style="position: absolute; margin-left: 700px; margin-top: 50px; width: 20%;">
+    <dialog open style="inline-size: 220px;overflow-wrap: break-word;font-size: smaller; padding: 3px">
+        Na zona da AML existem 1288 AUGIs
+    </dialog>
   </div>
 
   <script>

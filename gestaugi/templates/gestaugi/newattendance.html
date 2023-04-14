@@ -20,7 +20,7 @@
                                 <label>Sócio</label>
                               </div>
                               <select class="select-box" id="socio_id" name="socio">
-                                  <option selected>Escolha Sócio...</option>
+                                  <option selected>Escolha sócio...</option>
                                   {% for socio in socios %}
                                       <option value="{{ socio.socio_id }}:{{ socio.area }}"> {{ socio.nome }} - Sócio nº {{ socio.nsocio }}</option>
                                    {% endfor %}
@@ -36,7 +36,7 @@
                                <label>Data Assembleia</label>
                              </div>
                              <select class="select-box select-box2" id="datas_id" name="data">
-                                 <option selected>Escolha Data...</option>
+                                 <option selected>Escolha data...</option>
                                  {% for data in datas %}
                                      <option value="{{ data.dt_assembleia }}"> {{ data.dt_assembleia }} </option>
                                  {% endfor %}

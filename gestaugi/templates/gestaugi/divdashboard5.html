@@ -2,8 +2,14 @@
 
 {% block main %}
 
-  <div id="container" style="width: 50%;">
+  <div id="container" style="position: absolute; width: 40%;">
     <canvas id="infodashboard5" data-url="{% url 'gestaugi:infodashboard5' %}"></canvas>
+  </div>
+
+  <div id="texto" style="position: absolute; margin-left: 700px; margin-top: 50px; width: 20%;">
+    <dialog open style="inline-size: 250px;overflow-wrap: break-word;font-size: smaller; padding: 3px">
+      A AUGI de maior dimensão da AML localiza-se em Sintra, é a AUGI de Casal de Cambra com 178 ha.
+    </dialog>
   </div>
 
   <script>

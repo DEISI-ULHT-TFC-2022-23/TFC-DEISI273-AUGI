@@ -21,7 +21,7 @@
                                 <label>Sócio</label>
                               </div>
                               <select class="select-box" id="socio_id" name="socio">
-                                  <option selected>Escolha Sócio...</option>
+                                  <option selected>Escolha sócio...</option>
                                   {% for socio in socios %}
                                       <option value="{{ socio.socio_id }}"> {{ socio.nome }} - Sócio nº {{ socio.nsocio }}</option>
                                   {% endfor %}
@@ -32,7 +32,7 @@
                                 <label>Lote</label>
                               </div>
                               <select class="select-box select-box2" id="lote_id" name="lote">
-                                  <option selected>Escolha Lote...</option>
+                                  <option selected>Escolha lote...</option>
                                   {% for lote in lotes %}
                                       <option value="{{ lote.lote_id }}" onclick="fill_calc_values({{ lote.area }},{{ lote.nfogos }},
                                               {{ lote.frenteslote }})">Lote nº {{ lote.nlote }}</option>

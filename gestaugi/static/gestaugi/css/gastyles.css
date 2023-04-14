@@ -186,8 +186,7 @@ body>header  {
   display : block;
   padding : 0.2vw 0.5vw;
   margin : 0.5vw;
-  /*background-color : rgb(174,174,224); */
-  background-color: lightsteelblue;
+  background-color :rgb(172,202,228);
 }
 
 a {
@@ -306,4 +305,21 @@ tr:not(:first-child):hover {
 .ga-calc-input {
    margin: 5px;
    width: 100px;
+}
+
+.dropdown-menu li {
+    position: relative;
+}
+.dropdown-menu .dropdown-submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: -7px;
+}
+.dropdown-menu .dropdown-submenu-left {
+    right: 100%;
+    left: auto;
+}
+.dropdown-menu > li:hover > .dropdown-submenu {
+    display: block;
 }

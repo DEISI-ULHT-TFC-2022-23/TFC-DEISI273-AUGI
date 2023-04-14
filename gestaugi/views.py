@@ -12,7 +12,7 @@ from django.contrib import messages
 from .filters import SocioFilter, LoteFilter, CompartFilter, AssembleiaFilter, PresencaFilter, DespesasFilter, AnuidadesFilter
 from .filters import PagamentosFilter, TDespesasFilter
 from .utils import save2pdf
-from .querys import sql_accounts, sql_debts, sql_expenses, sql_totexpenses, sql_areas
+from .querys import sql_debts, sql_expenses, sql_totexpenses, sql_areas, sql_payments
 from django.db.models.deletion import ProtectedError, IntegrityError
 from decimal import Decimal
 import datetime
@@ -92,6 +92,8 @@ def newlot(request):
 		for lote in existslote:
 			if lote.dt_venda != None:
 				dtvenda = True
+		print(existslote.count())
+		print(dtvenda)
 		if existslote.count() > 0 and not dtvenda:
 			messages.add_message(request, messages.INFO, 'Lote ' + nlote + ' já atribuido ao sócio ' + existslote[0].socio.nome + ' !')
 			# return HttpResponseRedirect(reverse('gestaugi:dispmessage'))
@@ -99,8 +101,12 @@ def newlot(request):
 		else:
 			instance = form.save(commit=False)
 			instance.socio_id = request.POST.get('socio', None)
-			instance.save()
-			return HttpResponseRedirect(reverse('gestaugi:lots'))
+			if (instance.socio_id == 'Escolha sócio...'):
+				messages.add_message(request, messages.INFO, 'Tem de escolher um sócio!')
+				return render(request, 'gestaugi/messages.html', {'url': '/newlot'})
+			else:
+				instance.save()
+				return HttpResponseRedirect(reverse('gestaugi:lots'))
 	else:
 		print(form.errors)
 		#form = LoteForm()
@@ -185,6 +191,12 @@ def newcoparticipation(request):
 		instance = form.save(commit=False)
 		socio_id = request.POST.get('socio', None)
 		lote_id = request.POST.get('lote', None)
+		if (socio_id == 'Escolha sócio...'):
+			messages.add_message(request, messages.INFO, 'Tem de escolher um sócio!')
+			return render(request, 'gestaugi/messages.html', {'url': '/newcoparticipation'})
+		elif (lote_id == 'Escolha lote...'):
+			messages.add_message(request, messages.INFO, 'Tem de escolher um lote!')
+			return render(request, 'gestaugi/messages.html', {'url': '/newcoparticipation'})
 		# Vai buscar o valor de comparticipação que o sócio tem em divida
 		compdivida = Socios.objects.filter(pk=socio_id).values('compdivida')[0]['compdivida']
         # Adiciona o novo valor de comparticipação
@@ -341,7 +353,13 @@ def newattendance(request):
 		instance = form.save(commit=False)
 		# Chave estrangeira
 		socio_id = request.POST.get('socio', None)
-		data = request.POST.get('data',None)
+		data = request.POST.get('data', None)
+		if (socio_id == 'Escolha sócio...'):
+			messages.add_message(request, messages.INFO,'Tem de escolher um sócio!')
+			return render(request, 'gestaugi/messages.html', {'url': '/newattendance'})
+		if (data == 'Escolha data...'):
+			messages.add_message(request, messages.INFO,'Tem de escolher uma data!')
+			return render(request, 'gestaugi/messages.html', {'url': '/newattendance'})
 		orgao = request.POST.get('orgao',None)
 		instance.socio_id = socio_id.split(':')[0]
 		# Grava dt_assembleia
@@ -516,7 +534,11 @@ def newexpense(request):
 	if form.is_valid():
 		instance = form.save(commit=False)
 		instance.tipo_id = request.POST.get('tdespesa', None)
-		instance.save()
+		if (instance.tipo_id == 'Escolha tipo...'):
+			messages.add_message(request, messages.INFO,'Tem de escolher um tipo de despesa!')
+			return render(request, 'gestaugi/messages.html', {'url': '/newexpense'})
+		else:
+			instance.save()
 		return HttpResponseRedirect(reverse('gestaugi:expenses'))
 	else:
 		print(form.errors)
@@ -570,15 +592,19 @@ def newannuity(request):
 	if form.is_valid():
 		instance = form.save(commit=False)
 		socio_id = request.POST.get('socio', None)
-		instance.socio_id = socio_id
-		# Vai buscar o valor de anuidade que o sócio tem em divida
-		anuidivida = Socios.objects.filter(pk=socio_id).values('anuidivida')[0]['anuidivida']
-		# Adiciona o novo valor de comparticipação
-		anuidivida = anuidivida + Decimal(request.POST.get('anuidade', 0))
-		instance.save()
-		# Regista na tabela de Sócios o novo valor de anuidade em divida
-		Socios.objects.filter(pk=socio_id).update(anuidivida=anuidivida)
-		return HttpResponseRedirect(reverse('gestaugi:annuities'))
+		if (socio_id == 'Escolha sócio...'):
+			messages.add_message(request, messages.INFO,'Tem de escolher um sócio!')
+			return render(request, 'gestaugi/messages.html', {'url': '/newannuity'})
+		else:
+			instance.socio_id = socio_id
+			# Vai buscar o valor de anuidade que o sócio tem em divida
+			anuidivida = Socios.objects.filter(pk=socio_id).values('anuidivida')[0]['anuidivida']
+			# Adiciona o novo valor de comparticipação
+			anuidivida = anuidivida + Decimal(request.POST.get('anuidade', 0))
+			instance.save()
+			# Regista na tabela de Sócios o novo valor de anuidade em divida
+			Socios.objects.filter(pk=socio_id).update(anuidivida=anuidivida)
+			return HttpResponseRedirect(reverse('gestaugi:annuities'))
 	else :
 		print(form.errors)
 		#form = AnuidadesForm()
@@ -654,28 +680,32 @@ def newpayment(request):
 		instance = form.save(commit=False)
 		instance.socio_id = request.POST.get('socio', None)
 		socio_id = request.POST.get('socio', None)
-		# Vai verificar o tipo de pagamento
-		tipopag = request.POST.get('tipo', None)
-		if tipopag == 'Anuidade':
-			# Vai buscar o valor de anuidade que o sócio tem em divida
-			anuidivida = Socios.objects.filter(pk=socio_id).values('anuidivida')[0]['anuidivida']
-			# Subtrai ao valor em didiva o valor do pagamento
-			anuidivida = anuidivida - int(request.POST.get('pagamento', 0))
-			# Regista na tabela de Sócios o novo valor de anuidade em divida
-			Socios.objects.filter(pk=socio_id).update(anuidivida=anuidivida)
-		else:    # Pagamentos de comparticipações ou despesas
-			# Vai buscar o valor de comparticipação que o sócio tem em divida
-			compdivida = Socios.objects.filter(pk=socio_id).values('compdivida')[0]['compdivida']
-			# Subtrai ao valor em didiva o valor do pagamento
-			compdivida = compdivida - int(request.POST.get('pagamento', 0))
-			# Regista na tabela de Sócios o novo valor de comparticipação em divida
-			Socios.objects.filter(pk=socio_id).update(compdivida=compdivida)
-			if tipopag == 'Comparticipação':
-				# Se comparticipação regista nº de lote
-				instance.lote_id = request.POST.get('lote', None)
-        # Grava os dados do form
-		instance.save()
-		return HttpResponseRedirect(reverse('gestaugi:payments'))
+		if (socio_id == 'Escolha sócio...'):
+			messages.add_message(request, messages.INFO,'Tem de escolher um sócio!')
+			return render(request, 'gestaugi/messages.html', {'url': '/newpayment'})
+		else:
+			# Vai verificar o tipo de pagamento
+			tipopag = request.POST.get('tipo', None)
+			if tipopag == 'Anuidade':
+				# Vai buscar o valor de anuidade que o sócio tem em divida
+				anuidivida = Socios.objects.filter(pk=socio_id).values('anuidivida')[0]['anuidivida']
+				# Subtrai ao valor em didiva o valor do pagamento
+				anuidivida = anuidivida - int(request.POST.get('pagamento', 0))
+				# Regista na tabela de Sócios o novo valor de anuidade em divida
+				Socios.objects.filter(pk=socio_id).update(anuidivida=anuidivida)
+			else:    # Pagamentos de comparticipações ou despesas
+				# Vai buscar o valor de comparticipação que o sócio tem em divida
+				compdivida = Socios.objects.filter(pk=socio_id).values('compdivida')[0]['compdivida']
+				# Subtrai ao valor em didiva o valor do pagamento
+				compdivida = compdivida - int(request.POST.get('pagamento', 0))
+				# Regista na tabela de Sócios o novo valor de comparticipação em divida
+				Socios.objects.filter(pk=socio_id).update(compdivida=compdivida)
+				if tipopag == 'Comparticipação':
+					# Se comparticipação regista nº de lote
+					instance.lote_id = request.POST.get('lote', None)
+			# Grava os dados do form
+			instance.save()
+			return HttpResponseRedirect(reverse('gestaugi:payments'))
 	else :
 		print(form.errors)
 		#form = PagamentosForm()
@@ -821,6 +851,24 @@ def listpayments2csv(request):
     writer.writerow(['NºSócio', 'Nome', 'Pagamento','Tipo', 'Descrição','Dt. Pagamento'])
     for linha in pagamentos:
         writer.writerow([linha.socio.nsocio,linha.socio.nome,linha.pagamento,linha.tipo,linha.descricao,linha.dt_pagamento])
+    return response
+
+def listtotpayments2pdf(request):
+    template_name = "listtotpayments.html"
+    pagamentos = Pagamentos.objects.raw(sql_payments)
+    return save2pdf(
+        template_name, "Total_Pagamentos.pdf", {"record": pagamentos, }
+    )
+
+def listtotpayments2csv(request):
+    pagamentos = Pagamentos.objects.raw(sql_payments)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=pagamentos_totais.csv'
+    response.write(u'\ufeff'.encode('utf8'))
+    writer = csv.writer(response, delimiter=";")
+    writer.writerow(['NºSócio', 'Nome', 'Anuidades Pagas','Comparticipações Pagas'])
+    for linha in pagamentos:
+        writer.writerow([linha.socio.nsocio,linha.socio.nome,linha.anuidades,linha.comparticipacoes])
     return response
 
 def listexpenses2pdf(request):

@@ -36,7 +36,7 @@ class SocioForm(ModelForm):
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'nome','size' : '30'}),
             'morada': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'morada','size' : '30'}),
             'localidade': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'localidade', 'size': '30'}),
-            'cpostal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '1000-000', 'size': '8'}),
+            'cpostal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '1000-001', 'size': '8'}),
             'cpostlocal': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'localidade do cod.postal', 'size': '30'}),
             'telemovel': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '912123123'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email@dominio.com', 'size': '40'}),

@@ -29,6 +29,7 @@ sql_debts2 = "select gs.socio_id, gs.nsocio ,gs.nome, gs.lotes , gs.anuidivida ,
             where gp.tipo = 'Comparticipação' \
             order by gs.nsocio"
 
+# Despesas por tipo de despesa, por ano
 sql_expenses = "select ano, despesa, dt_registo,descricao, despesa_id from ( \
                 select '1' coluna, despesa_id, ano sep,'' || ano as ano, despesa, dt_registo, gt.descricao \
                 from gestaugi_despesas gd \
@@ -42,6 +43,7 @@ sql_expenses = "select ano, despesa, dt_registo,descricao, despesa_id from ( \
                 from gestaugi_despesas gd) \
                 as res order by case when coluna ='99' then 1 else 0 end, sep, coluna"
 
+# Despesas por tipo de despesa, por ano
 sql_totexpenses = "select despesa_id, descricao, despesa from ( \
                    select '1' coluna, gd.despesa_id,gt.descricao, sum(gd.despesa) as despesa \
                    from gestaugi_despesas gd \
@@ -52,8 +54,24 @@ sql_totexpenses = "select despesa_id, descricao, despesa from ( \
                    from gestaugi_despesas gd) as despesas \
                    ORDER by coluna"
 
+# Áreas dos lotes dos sócios
 sql_areas = "select gs.socio_id, gs.nsocio, gs.nome, sum(area) as area \
              from gestaugi_socios gs \
              left outer join gestaugi_lotes gl on (gl.socio_id=gs.socio_id) \
              group by gs.socio_id,gs.nsocio \
              order by gs.nome"
+
+# Pagamentos totais dos sócios
+sql_payments = "select gs.socio_id, gs.nome, gp.pagamento_id, \
+               case when tipo = 'Anuidade' \
+                  then sum(pagamento) \
+                  else 0 \
+               end as anuidades, \
+               case when tipo = 'Comparticipação' \
+                  then sum(pagamento) \
+                  else 0 \
+               end as comparticipacoes \
+               from gestaugi_socios gs \
+               inner join gestaugi_pagamentos gp on (gp.socio_id = gs.socio_id) \
+               group by gs.socio_id \
+               order by gs.nome"

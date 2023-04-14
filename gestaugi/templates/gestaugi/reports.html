@@ -30,8 +30,18 @@
        <div class="dropdown">
           <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Pagamentos <span class="caret"></span></button>
           <ul class="dropdown-menu">
-            <li><a href="/listpayments2pdf">PDF</a></li>
-            <li><a href="/listpayments2csv">CSV</a></li>
+            <li><a class="dropdown-item" href="#">Detalhe &raquo;</a>
+              <ul class="dropdown-menu dropdown-submenu">
+                <li><a class="dropdown-item" href="/listpayments2pdf">PDF</a></li>
+                <li><a class="dropdown-item" href="/listpayments2csv">CSV</a></li>
+              </ul>
+            </li>
+            <li><a class="dropdown-item" href="#">Totais &raquo;</a>
+              <ul class="dropdown-menu dropdown-submenu">
+                <li><a class="dropdown-item" href="/listtotpayments2pdf">PDF</a></li>
+                <li><a class="dropdown-item" href="/listtotpayments2csv">CSV</a></li>
+              </ul>
+            </li>
           </ul>
        </div>
        <h4> Relatórios Despesas </h4>
