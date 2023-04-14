@@ -73,5 +73,5 @@ sql_payments = "select gs.socio_id, gs.nome, sum(gp.pagamento_id) as pagamento_i
                end as comparticipacoes \
                from gestaugi_socios gs \
                inner join gestaugi_pagamentos gp on (gp.socio_id = gs.socio_id) \
-               group by gs.socio_id \
+               group by gs.socio_id,gp.tipo \
                order by gs.nome"
