@@ -127,26 +127,32 @@ def viewlot(request,lote_id):
 
 def editlot(request,lote_id):
 	lote = Lotes.objects.get(pk=lote_id)
+	nlote_old = lote.nlote
 	# Id do Socio dono do lote
 	socio_id = Lotes.objects.get(pk=lote_id).socio_id
 	# Vai buscar o nome do Socio a tabela de sócios, vai ficar selecionado no dropdown
 	socios = Socios.objects.all().values('nsocio', 'nome').filter(pk=socio_id)
 	form = LoteForm(request.POST or None, instance=lote)
 	if form.is_valid():
-		#Verificar se o lote já se encontra atribuido a outro socio e sem data de venda
+		#Se houver modificação do lote vai verificar se já se encontra atribuido a outro socio e sem data de venda
 		nlote = request.POST.get('nlote',None)
-		existslote = Lotes.objects.select_related('socio').filter(nlote=nlote)
-		dtvenda = False
-		# Podem existir varios registos do mesmo lote já vendidos
-		for lote in existslote:
-			if lote.dt_venda != None:
-				dtvenda = True
-		if existslote.count() > 0 and not dtvenda:
-			messages.add_message(request, messages.INFO, 'Lote ' + nlote + ' já atribuido ao sócio ' + existslote[0].socio.nome + ' !')
-			# return HttpResponseRedirect(reverse('gestaugi:dispmessage'))
-			return render(request, 'gestaugi/messages.html', {'url': '/lots'})
+		if (int(nlote) != nlote_old):
+			existslote = Lotes.objects.select_related('socio').filter(nlote=nlote)
+			dtvenda = False
+			# Podem existir varios registos do mesmo lote já vendidos
+			for lote in existslote:
+				if lote.dt_venda != None:
+					dtvenda = True
+			if existslote.count() > 0 and not dtvenda:
+				messages.add_message(request, messages.INFO, 'Lote ' + nlote + ' já atribuido ao sócio ' + existslote[0].socio.nome + ' !')
+				# return HttpResponseRedirect(reverse('gestaugi:dispmessage'))
+				return render(request, 'gestaugi/messages.html', {'url': '/lots'})
 		else:
 			form.save()
+			# Vai verificar se sócio tem lotes sem data de venda, se não tiver passa a inativo
+			temlotes = Lotes.objects.filter(socio_id=socio_id, dt_venda__isnull=True)
+			if temlotes.count() == 0:
+				Socios.objects.filter(pk=socio_id).update(estado='Inativo')
 			return HttpResponseRedirect(reverse('gestaugi:lots'))
 	else:
 		print(form.errors)
@@ -169,7 +175,7 @@ def coparticipation_page_view(request):
 
 def newcoparticipation(request):
 	# Lista de socios para escolha
-	socios = Socios.objects.all().values('socio_id','nsocio','nome').order_by('nome')
+	socios = Socios.objects.filter(estado__exact='Ativo').values('socio_id','nsocio','nome').order_by('nome')
 	#Parametros - Valores totais para calculo da comparticipação
 	param = Parametros.objects.all().filter(pk=1).values('vtotobra','tfrenlot','tfoglot','tarealot')
 	if param.count() > 0:
@@ -587,7 +593,7 @@ def annuities_page_view(request):
 
 def newannuity(request):
 	#Lista de socios para escolha / associar a anuidade
-	socios = Socios.objects.all().values('socio_id','nsocio','nome').order_by('nome')
+	socios = Socios.objects.filter(estado__exact='Ativo').values('socio_id','nsocio','nome').order_by('nome')
 	form = AnuidadesForm(request.POST or None,initial={"anuidade": 30})
 	if form.is_valid():
 		instance = form.save(commit=False)
@@ -672,7 +678,7 @@ def payments_page_view(request):
 
 def newpayment(request):
 	#Lista de socios para escolha / associar a anuidade
-	socios = Socios.objects.all().values('socio_id','nsocio','nome').order_by('nome')
+	socios = Socios.objects.filter(estado__exact='Ativo').values('socio_id','nsocio','nome').order_by('nome')
 	#Lista de lotes para escolha
 	lotes = Lotes.objects.all()
 	form = PagamentosForm(request.POST or None)

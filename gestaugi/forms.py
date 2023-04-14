@@ -4,7 +4,7 @@ from .models import CodPostais, Socios, Lotes, Comparticipacoes, Assembleias, Pr
 
 STATUS_CHOICES = [
     ('Ativo', 'Ativo'),
-    ('Inactivo', 'Inactivo'),
+    ('Inativo', 'Inativo'),
     ('Anulado', 'Anulado'),
     ('Suspenso', 'Suspenso'),
     ]
