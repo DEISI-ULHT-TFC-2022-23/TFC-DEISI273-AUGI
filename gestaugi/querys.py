@@ -62,7 +62,7 @@ sql_areas = "select gs.socio_id, gs.nsocio, gs.nome, sum(area) as area \
              order by gs.nome"
 
 # Pagamentos totais dos sócios
-sql_payments = "select gs.socio_id, gs.nome, gp.pagamento_id, \
+sql_payments = "select gs.socio_id, gs.nome, sum(gp.pagamento_id) as pagamento_id, \
                case when tipo = 'Anuidade' \
                   then sum(pagamento) \
                   else 0 \
