@@ -1054,7 +1054,7 @@ def divdashboard5_page_view(request):
 def infodashboard5(request):
 	labels = []
 	data = []
-	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(augi_maior=Sum('augi_maior'))
+	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(augi_maior=Sum('augi_maior')).order_by('augi_maior')
 	for entry in queryset:
 		labels.append(entry['municipio'])
 		data.append(entry['augi_maior'])
