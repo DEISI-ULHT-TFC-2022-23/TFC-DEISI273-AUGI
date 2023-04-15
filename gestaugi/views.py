@@ -162,8 +162,13 @@ def editlot(request,lote_id):
 
 def deletelot(request,lote_id):
 	instance = Lotes.objects.get(lote_id=lote_id)
-	instance.delete()
-	return HttpResponseRedirect(reverse('gestaugi:lots'))
+	try:
+		instance.delete()
+		return HttpResponseRedirect(reverse('gestaugi:lots'))
+	except ProtectedError:
+		messages.add_message(request, messages.INFO, 'Lote com Comparticipações. Não é possivel suprimir!')
+		#return HttpResponseRedirect(reverse('gestaugi:dispmessage'))
+		return render(request,'gestaugi/messages.html',{'url':'/lots'})
 
 def coparticipation_page_view(request):
 	compart = Comparticipacoes.objects.all().order_by("compart_id")
