@@ -30,4 +30,4 @@ pip uninstall -r requirements.txt -y
 
 venv\scripts\deactivate.bat
 
-rmdir /s venv      - Windows
+rmdir /s venv     
