@@ -22,6 +22,8 @@ pip install -r requirements.txt
 
 python manage.py runserver
 
+Aceder via browser ao endereço http://127.0.0.1:8000/
+
 # Para desinstalar 
 
 pip uninstall -r requirements.txt -y
