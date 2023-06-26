@@ -34,7 +34,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# Para clonagem em ambiente local
 SECRET_KEY = 'django-insecure-rk!-d!#d5e@y0-qvjp+32*^)&tgkar^n9g&z48=pa6b0lc8xb5'
+# Para Heroku
 #SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -97,16 +99,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# Para clonagem em ambiente local
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': BASE_DIR / 'db.sqlite3',
-     }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
-#DATABASES = {
-#    "default": env.dj_db_url("DATABASE_URL")
-#}
+#Para Heroku
+# DATABASES = {
+#     "default": env.dj_db_url("DATABASE_URL")
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -156,4 +160,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Depois do login é redirecionado para a página home
+LOGIN_REDIRECT_URL = '/'
 
