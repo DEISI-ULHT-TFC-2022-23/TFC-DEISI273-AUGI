@@ -1,0 +1,66 @@
+{% extends 'gestaugi/base.html' %}
+
+{% block main %}
+  <div style="position: relative; margin-top: 2%; width: 70%;">
+    {% if user.is_authenticated %}
+    {% else %}
+      <p>Só utilizadores registados têm acesso a esta página. Introduza as suas credenciais.</p>
+    {% endif %}
+
+    {% if form.errors %}
+      <p style="color: red">O seu login e password não coincidem. Tente outra vez.</p>
+    {% endif %}
+
+  </div>
+
+  <div style="position: absolute; margin-left: 0%; margin-top: 7%; width: 20%;">
+  <form method="post" id="form" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <td> Utilizador:</td>
+        <td>{{ form.username }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+      </tr>
+    </table>
+    <br>
+    <button type="button" class="btn btn-primary" onclick="submitForm()"> Login </button>
+
+  </form>
+  </div>
+
+  <script>
+    // Se o utilizador é autenticado dá acesso ao menu de administração
+    function submitForm(){
+      $.ajax({
+            type: 'post',
+            data: $('#form').serialize(),
+            success: function () {
+              var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+              $.ajaxSetup({
+                  beforeSend: function(xhr, settings) {
+                      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                  }
+              });
+              $.get('/check_auth/', function (data) {
+                  console.log(data.is_authenticated)
+                  if (data.is_authenticated) {
+                      gamn.style.display = 'block';
+                      divmn.style.display = 'none';
+                      mn.style.display = 'none';
+                      localStorage.setItem('gamenu', true);
+                      localStorage.removeItem('divmenu');
+                      window.location.href = '/';
+                  } else {
+                    alert('O seu login e/ou password não coincidem. Tente outra vez.');
+                  }
+              });
+            }
+          });
+    }
+  </script>
+
+{% endblock %}
