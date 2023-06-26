@@ -13,6 +13,8 @@ django-tables2 = "*"
 django-filter = "*"
 crispy-bootstrap4 = "*"
 xhtml2pdf = "*"
+openpyxl = "*"
+pandas = "*"
 
 [dev-packages]
 
