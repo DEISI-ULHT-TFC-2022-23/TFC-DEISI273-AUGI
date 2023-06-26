@@ -1,7 +1,11 @@
   <section class="navmenu">
     <div id="menu">
         <ul>
-        <li><span> <a href="{% url 'gestaugi:home' %}" onclick="gamenu()"><i class="material-icons">hdr_auto</i><b>Administração Augi</b></a></span> </li>
+        {% if user.is_authenticated %}
+           <li><span> <a href="{% url 'gestaugi:home' %}" id="optgamenu" onclick="gamenu()"><i class="material-icons">hdr_auto</i><b>Administração Augi</b></a></span> </li>
+        {% else %}
+           <li><span> <a href="{% url 'gestaugi:login' %}"><i class="material-icons">hdr_auto</i><b>Administração Augi</b></a></span> </li>
+        {% endif %}
         <li><span> <a href="{% url 'gestaugi:home' %}" onclick="divmenu()"><i class="material-icons">info</i><b>Divulgação</b></a></span> </li>
         <li style="visibility: hidden"><span> <i class="material-icons">calculate</i><b></b></span> </li>
         <li style="visibility: hidden"><span> <i class="material-icons">credit_card</i><b></b></span> </li>
@@ -36,8 +40,8 @@
         <li><span> <a href="{% url 'gestaugi:divdashboard3' %}"><i class="material-icons">leaderboard</i><b>Área Total</b></a></span> </li>
         <li><span> <a href="{% url 'gestaugi:divdashboard4' %}"><i class="material-icons">donut_small</i><b>Área Média</b></a></span> </li>
         <li><span> <a href="{% url 'gestaugi:divdashboard5' %}"><i class="material-icons">donut_small</i><b>Maiores Augis</b></a></span> </li>
-        <li style="visibility: hidden"><span> <a href="{% url 'gestaugi:assembly' %}"><i class="material-icons">diversity_3</i><b>Assembleias</b></a></span> </li>
-        <li style="visibility: hidden"><span> <a href="{% url 'gestaugi:attendance' %}"><i class="material-icons">co_present</i><b>Presenças</b></a></span> </li>
+        <li><span> <a href="{% url 'gestaugi:inqueritos' %}"><i class="material-icons">quiz</i><b>Resultados Inquéritos</b></a></span> </li>
+        <li><span> <a href="https://diariodarepublica.pt/dr/legislacao-consolidada/lei/1995-73693186" target="_blank"><i class="material-icons">gavel</i><b>Legislação</b></a></span> </li>
         <li style="visibility: hidden"><span> <a href="{% url 'gestaugi:expenses' %}"><i class="material-icons">euro_symbol</i><b>Despesas</b></a></span> </li>
         <li style="visibility: hidden"><span> <a href="{% url 'gestaugi:reports' %}"><i class="material-icons">article</i><b>Relatórios</b></a></span> </li>
         </ul>

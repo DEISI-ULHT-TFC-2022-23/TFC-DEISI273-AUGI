@@ -32,7 +32,7 @@
                               </div>
                               <select class="select-box select-box2" id="lote_id" name="lote">
                                   {% for lote in lote %}
-                                      <option selected value="{{ lote.lote_id }}" onclick="fill_calc_values({{ lote.area }},{{ lote.nfogos }},
+                                      <option id="lote_sel" selected value="{{ lote.lote_id }}" onclick="fill_calc_values({{ lote.area }},{{ lote.nfogos }},
                                               {{ lote.frenteslote }})">Lote nº {{ lote.nlote }}</option>
                                   {% endfor %}
                               </select>
@@ -117,6 +117,10 @@
       {% endblock %}
   </form>
   <script>
+      // quando a página é carregada força o evento click no lote para atualizar os valores de calculo
+      document.addEventListener('DOMContentLoaded', function () {
+          $('#lote_sel').trigger('click');
+      })
      {# Calculo da comparticipação #}
       function calculate(){
                 var Compart = 0 ;

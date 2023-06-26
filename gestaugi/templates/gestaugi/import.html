@@ -1,0 +1,17 @@
+{% extends 'gestaugi/base.html' %}
+{% load static %}
+
+{% block main %}
+   {% block title %} <h4> Importação Dados </h4> {% endblock %}
+   <form method = "POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div style="position: absolute; margin-top: 2%">
+          <label for="id_file" style="width:200px;color: white"> Escolha o ficheiro a importar  </label>
+          <input type="file" name="file" required id="file" class="uploadFile btn btn-primary">
+          <br>
+          <button type="submit" class="btn btn-primary"> Importar </button>
+{#        <button class="btn btn-primary" type="button" onclick="location.href='/import'" style="width: 120px" > Importar </button>#}
+      </div>
+  </form>
+
+{% endblock %}

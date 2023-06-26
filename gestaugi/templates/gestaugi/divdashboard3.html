@@ -2,8 +2,14 @@
 
 {% block main %}
 
-  <div id="container" style="width: 75%;">
+  <div id="container" style="position: absolute; width: 75%;">
     <canvas id="infodashboard3" data-url="{% url 'gestaugi:infodashboard3' %}"></canvas>
+  </div>
+
+  <div id="texto" style="position: absolute; margin-left: 700px; margin-top: 50px; width: 20%;">
+    <dialog open style="inline-size: 250px;overflow-wrap: break-word;font-size: smaller; padding: 3px">
+        Informação recolhida pela DGT entre maio de 2018 e maio de 2019.
+    </dialog>
   </div>
 
   <script>
