@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from .models import Socios, Lotes, Comparticipacoes, Assembleias, Presencas, Despesas, Anuidades, Pagamentos, TiposDespesas, Parametros, AugiDashboard
-from django.db.models import Sum
+from django.shortcuts import render, redirect
+from .models import Socios, Lotes, Comparticipacoes, Assembleias, Presencas, Despesas, Anuidades, Pagamentos, TiposDespesas
+from .models import Parametros, AugiDashboard, CodPostais
+from django.db.models import Sum, Max
 from .forms import SocioForm, SocioViewForm, LoteForm, LoteViewForm, CompartForm, CompartViewForm, AssembleiaForm
 from .forms import AssembleiaViewForm, PresencaForm, PresencaViewForm, DespesasForm, DespesasViewForm, AnuidadesForm
-from .forms import AnuidadesViewForm, PagamentosForm, PagamentosViewForm, TiposDespesasForm, TiposDespesasViewForm
+from .forms import AnuidadesViewForm, PagamentosForm, PagamentosViewForm, TiposDespesasForm, TiposDespesasViewForm, ImportForm
 from .tables import SociosTable, LotesTable, CompartTable, AssembleiasTable, PresencasTable, PagamentosTable, DespesasTable
 from .tables import AnuidadesTable, TDespesasTable, ParametrosTable
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -14,14 +15,29 @@ from .filters import PagamentosFilter, TDespesasFilter
 from .utils import save2pdf
 from .querys import sql_debts, sql_expenses, sql_totexpenses, sql_areas, sql_payments
 from django.db.models.deletion import ProtectedError, IntegrityError
+from django.db.models.constraints import ValidationError
+from django.contrib.auth import authenticate, login, logout
 from decimal import Decimal
+import pandas as pd
 import datetime
+from datetime import datetime as dt
 import csv
 
 # Create your views here.
 def home_page_view(request):
+	if request.user.is_authenticated:
+		print(request.user)
 	return render(request, 'gestaugi/home.html')
 
+def login(request):
+	if not request.user.is_authenticated:
+		return redirect('/accounts/login')    # Login na app
+	else:
+		return render(request, 'gestaugi/home.html')
+def check_auth(request):
+	data = {'is_authenticated': request.user.is_authenticated}
+	print(data)
+	return JsonResponse(data)
 def partners_page_view(request):
 	socios = Socios.objects.all().order_by("nsocio")
 	filtro = SocioFilter(request.GET,socios)
@@ -31,7 +47,13 @@ def partners_page_view(request):
 				  context={"model":socios, "table":table, "filter": filtro})
 
 def newpartner(request):
-	form = SocioForm(request.POST or None)
+	# Vai buscar o ultimo numero de socio
+	maxSocio = Socios.objects.aggregate(Max('nsocio'))
+	maxSocioNb = 0
+	if maxSocio['nsocio__max'] != None:
+		maxSocioNb = maxSocio['nsocio__max']
+	#print(maxSocioNb)
+	form = SocioForm(request.POST or None, initial={'nsocio': maxSocioNb + 1})
 	if form.is_valid():
 		# A singularidade do nº de sócio é garantida pelas regras de integridade implementadas no modelo
 		form.save()
@@ -80,9 +102,14 @@ def lots_page_view(request):
 				  context={"model":lotes, "table":table, "filter": filtro})
 
 def newlot(request):
+	# Vai buscar o ultimo numero de lote
+	maxLote = Lotes.objects.aggregate(Max('nlote'))
+	maxLoteNb = 0
+	if maxLote['nlote__max'] != None:
+		maxLoteNb = maxLote['nlote__max']
 	#Lista de socios para escolha / associar ao lote
 	socios = Socios.objects.all().values('socio_id','nsocio','nome').order_by('nome')
-	form = LoteForm(request.POST or None)
+	form = LoteForm(request.POST or None, initial={'nlote': maxLoteNb + 1})
 	if form.is_valid():
 		#Verificar se o lote já se encontra atribuido a outro socio e sem data de venda
 		nlote = request.POST.get('nlote',None)
@@ -305,8 +332,9 @@ def assembly_page_view(request):
 
 def newassembly(request):
 	#Representação total - total das areas adquiridas
-	rept_total = Lotes.objects.all().aggregate(Sum('area'))
-	form = AssembleiaForm(request.POST or None, initial={'rep_total': rept_total['area__sum']})
+	#rept_total = Lotes.objects.all().aggregate(Sum('area'))
+	rept_total = Socios.objects.filter(estado='Ativo').aggregate(Sum('representacao'))
+	form = AssembleiaForm(request.POST or None, initial={'rep_total': round(rept_total['representacao__sum'],2)})
 	if form.is_valid():
 		form.save()
 		return HttpResponseRedirect(reverse('gestaugi:assembly'))
@@ -437,12 +465,12 @@ def editattendance(request,presenca_id):
 					update_reptassembly(oldorgao, olddata, oldrepresentacao, '-')
 					# Adiciona a alterada
 					update_reptassembly(oldorgao, olddata, newrepresentacao, '+')
-				print(olddata)
-				print(newdata)
-				print(oldorgao)
-				print(neworgao)
-				print(oldrepresentacao)
-				print(newrepresentacao)
+				# print(olddata)
+				# print(newdata)
+				# print(oldorgao)
+				# print(neworgao)
+				# print(oldrepresentacao)
+				# print(newrepresentacao)
 			# Se houve alterações a data ou orgão -> Assembleia diferente
 			if olddata != newdata or oldorgao != neworgao:
 				# Vai diminuir o nº de presenças e de representação na assembleia anterior
@@ -457,12 +485,12 @@ def editattendance(request,presenca_id):
 				Assembleias.objects.filter(orgao=neworgao, dt_assembleia=newdata).update(presencas=presencas)
 				# Adiciona a alterada
 				update_reptassembly(neworgao, newdata, newrepresentacao, '+')
-				print(olddata)
-				print(newdata)
-				print(oldorgao)
-				print(neworgao)
-				print(oldrepresentacao)
-				print(newrepresentacao)
+				# print(olddata)
+				# print(newdata)
+				# print(oldorgao)
+				# print(neworgao)
+				# print(oldrepresentacao)
+				# print(newrepresentacao)
 		except IntegrityError:
 			messages.add_message(request, messages.INFO, 'Presença de sócio já registada para esta assembleia!')
 			return render(request, 'gestaugi/messages.html', {'url': '/attendance'})
@@ -1036,7 +1064,7 @@ def infodashboard3(request):
 	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(area_total=Sum('area_total')).order_by('-area_total')
 	for entry in queryset:
 		labels.append(entry['municipio'])
-		data.append(entry['area_total'])
+		data.append(round(entry['area_total'],2))
 
 	return JsonResponse(data={
 		'labels': labels,
@@ -1052,7 +1080,7 @@ def infodashboard4(request):
 	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(area_media=Sum('area_media')).order_by('area_media')
 	for entry in queryset:
 		labels.append(entry['municipio'])
-		data.append(entry['area_media'])
+		data.append(round(entry['area_media'],2))
 
 	return JsonResponse(data={
 		'labels': labels,
@@ -1068,9 +1096,164 @@ def infodashboard5(request):
 	queryset = AugiDashboard.objects.filter(reconversao__gt=0).values('municipio').annotate(augi_maior=Sum('augi_maior')).order_by('augi_maior')
 	for entry in queryset:
 		labels.append(entry['municipio'])
-		data.append(entry['augi_maior'])
+		data.append(round(entry['augi_maior'],2))
 
 	return JsonResponse(data={
 		'labels': labels,
 		'data': data,
 	})
+
+def inqueritos(request):
+	return render(request, 'gestaugi/inqueritos.html')
+def import_page_view(request):
+	if request.method == 'POST' and request.FILES['file']:
+		xlsFile = request.FILES['file']
+		print(xlsFile.name)
+		if xlsFile.name.endswith('.xlsx'):
+			if 'Socios' in xlsFile.name:     # Excel com sócios
+				if import_socios(request,xlsFile) == True:
+					messages.add_message(request, messages.INFO, 'Dados Importados !')
+					return render(request, 'gestaugi/messages.html', {'url': '/import'})
+			elif 'Lotes' in xlsFile.name:     # Excel com lotes
+				if import_lotes(request,xlsFile) == True:
+					messages.add_message(request, messages.INFO, 'Dados Importados !')
+					return render(request, 'gestaugi/messages.html', {'url': '/import'})
+			elif 'Compart' in xlsFile.name:     # Excel com comparticipações
+				if import_compart(request,xlsFile) == True:
+					messages.add_message(request, messages.INFO, 'Dados Importados !')
+					return render(request, 'gestaugi/messages.html', {'url': '/import'})
+			elif 'Pagamentos' in xlsFile.name:     # Excel com pagamentos
+				if import_pagamentos(request,xlsFile) == True:
+					messages.add_message(request, messages.INFO, 'Dados Importados !')
+					return render(request, 'gestaugi/messages.html', {'url': '/import'})
+			else:
+				messages.add_message(request, messages.INFO, 'Ficheiro inválido !')
+				return render(request, 'gestaugi/messages.html', {'url': '/import'})
+		else:
+			messages.add_message(request, messages.INFO, 'Formato inválido !')
+			return render(request, 'gestaugi/messages.html', {'url': '/import'})
+	return render(request, 'gestaugi/import.html')
+
+def import_socios(request, xlsFile):
+	try:
+		impData = pd.read_excel(xlsFile)
+		print(impData.head())
+		for index, row in impData.iterrows():
+			nsocio = row['Socio']
+			nome = row['Nome']
+			morada = row['Morada']
+			localidade = row['Local']
+			local = row['Localidade']
+			cpostal = CodPostais.objects.get(codpostal=local[:8])   # Código postal - 8 posições a esquerda
+			cpostlocal = local[9:]      # Restante designação da localidade
+			telemovel = row['Telemovel']
+			lotes = row['Lotes']
+			compdivida = round(Decimal(row['Comp Divida']),2)
+			anuidivida = round(Decimal(row['Anuidades']),2)
+			dt_admissao = datetime.date.today()
+			email = row['Email']
+			repres = round(Decimal(row['Repres']),2)     # Representação - Adicionar na BD
+			estado = 'Ativo' if row['Activo'] == 'S' else 'Inativo'
+			#print(nsocio, nome, lotes, repres, anuidivida)
+			try:
+				registo = Socios(nsocio=nsocio, nome=nome, morada=morada, localidade=localidade,
+								 cpostal=cpostal, cpostlocal=cpostlocal, telemovel=telemovel,
+								 email=email, lotes=lotes, representacao=repres, compdivida=compdivida,
+								 anuidivida=anuidivida, dt_admissao=dt_admissao, estado=estado)
+				registo.save()
+			except ValidationError as v:
+				messages.add_message(request, messages.INFO, f'Erros de validação de dados. {str(v)} !')
+				return render(request, 'gestaugi/messages.html', {'url': '/import'})
+		return True
+	except Exception as e:
+		messages.add_message(request, messages.INFO, f'Erro a importar dados. {str(e)} !')
+		return render(request, 'gestaugi/messages.html', {'url': '/import'})
+
+def import_lotes(request, xlsFile):
+	try:
+		impData = pd.read_excel(xlsFile)
+		print(impData.head())
+		for index, row in impData.iterrows():
+			socio_id = Socios.objects.get(nsocio=row['Socio']).socio_id
+			nlote = int(row['Lote'])
+			area = round(Decimal(row['Área lotes']),2)
+			dt_aquisicao = pd.to_datetime(row['Data Aq'])
+			#dt_aquisicao = dt.strftime(dt_aquisicao,format='%d/%m/%Y')
+			dt_venda = pd.to_datetime(row['Data Venda'])
+			if pd.isna(row['Data Venda']):
+				dt_venda = None
+				#dt_venda = dt.strftime(dt_venda,format='%d/%m/%Y')
+			nfogos = int(row['Num fogos'])
+			frenteslote = int(row['Frente'])
+			local = 'Cova da Moira'
+			#print(index,row)
+			#print(socio_id, nlote, area, dt_aquisicao, dt_venda, nfogos, frenteslote, local)
+			try:
+				registo = Lotes(socio_id=socio_id, nlote=nlote, area=area,
+						    	 dt_aquisicao=dt_aquisicao, dt_venda=dt_venda,
+								 nfogos=nfogos, frenteslote=frenteslote, local=local)
+				registo.save()
+			except ValidationError as v:
+				messages.add_message(request, messages.INFO, f'Erros de validação de dados. {str(v)} !')
+				return render(request, 'gestaugi/messages.html', {'url': '/import'})
+		return True
+	except Exception as e:
+		messages.add_message(request, messages.INFO, f'Erro a importar dados. {str(e)} !')
+		return render(request, 'gestaugi/messages.html', {'url': '/import'})
+
+def import_compart(request, xlsFile):
+	try:
+		impData = pd.read_excel(xlsFile)
+		print(impData.head())
+		for index, row in impData.iterrows():
+			socio_id = Socios.objects.get(nsocio=row['Socio']).socio_id
+			lote_id = Lotes.objects.get(nlote=row['Lote']).lote_id
+			valor = round(Decimal(row['Valor Pagar']),2)
+			dt_compart = pd.to_datetime(row['Data Comp'])
+			#dt_compart = dt.strftime(dt_compart,format='%d/%m/%Y')
+			desc = row['Descr']
+			tipo = row['Tipo']
+			#print(index,row)
+			#print(socio_id, lote_id, valor, dt_compart, desc, tipo)
+			try:
+				registo = Comparticipacoes(socio_id=socio_id, lote_id=lote_id, valor_calculado=valor,
+						    	 dt_valor=dt_compart, dt_registo= datetime.date.today(),
+								 dt_estado=datetime.date.today(), descricao=desc, tipo=tipo,
+								 estado='Calculado')
+				registo.save()
+			except ValidationError as v:
+				messages.add_message(request, messages.INFO, f'Erros de validação de dados. {str(v)} !')
+				return render(request, 'gestaugi/messages.html', {'url': '/import'})
+		return True
+	except Exception as e:
+		messages.add_message(request, messages.INFO, f'Erro a importar dados. {str(e)} !')
+		return render(request, 'gestaugi/messages.html', {'url': '/import'})
+
+def import_pagamentos(request, xlsFile):
+	try:
+		impData = pd.read_excel(xlsFile)
+		print(impData.head())
+		for index, row in impData.iterrows():
+			socio_id = Socios.objects.get(nsocio=row['Socio']).socio_id
+			if pd.isna(row['Lote']):
+				lote_id = None
+			else:
+				lote_id = Lotes.objects.get(nlote=row['Lote']).lote_id
+			valor = round(Decimal(row['Valor Pago']),2)
+			dt_pag = pd.to_datetime(row['Data Pag'])
+			#dt_pag = dt.strftime(dt_pag,format='%d/%m/%Y')
+			desc = row['Descr']
+			tipo = row['Tipo']
+			#print(index,row)
+			#print(socio_id, lote_id, valor, dt_pag, desc, tipo)
+			try:
+				registo = Pagamentos(socio_id=socio_id, lote_id=lote_id, pagamento=valor,
+						    	 dt_pagamento=dt_pag, descricao=desc, tipo=tipo)
+				registo.save()
+			except ValidationError as v:
+				messages.add_message(request, messages.INFO, f'Erros de validação de dados. {str(v)} !')
+				return render(request, 'gestaugi/messages.html', {'url': '/import'})
+		return True
+	except Exception as e:
+		messages.add_message(request, messages.INFO, f'Erro a importar dados. {str(e)} !')
+		return render(request, 'gestaugi/messages.html', {'url': '/import'})

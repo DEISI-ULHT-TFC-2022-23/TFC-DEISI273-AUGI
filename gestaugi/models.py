@@ -18,6 +18,7 @@ class Socios(models.Model):
     telemovel = models.CharField(max_length=15)
     email = models.EmailField(max_length=254)
     lotes = models.CharField(max_length=80, verbose_name="Lotes")
+    representacao = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Representação")
     compdivida = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Comp. Devidas")
     anuidivida = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Anuid. Devidas")
     dt_admissao = models.DateField(verbose_name="Dt.Admissão")

@@ -41,6 +41,7 @@ class SocioForm(ModelForm):
             'telemovel': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '912123123'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email@dominio.com', 'size': '40'}),
             'lotes': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'lotes', 'size': '20'}),
+            'representacao' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'representação', 'size': '10'}),
             'compdivida' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'comp.divida', 'size': '10'}),
             'anuididiva' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'anui.divida', 'size': '10'}),
             'dt_admissao': forms.DateInput(format=('%Y-%m-%d'),attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa','type': 'date'}),
@@ -58,6 +59,7 @@ class SocioForm(ModelForm):
             'telemovel': 'Telemovel',
             'email': 'Email',
             'lotes': 'Lotes',
+            'representacao' : 'Representação',
             'compdivida': 'Comp.Devidas',
             'anuidivida': 'Anuid.Devidas',
             'dt_admissao': 'Dt.Admissão',
@@ -90,7 +92,8 @@ class SocioViewForm(ModelForm):
             'cpostlocal': forms.TextInput(attrs={'class': 'form-control', 'size': '30', 'readonly': 'True'}),
             'telemovel': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'True'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'size': '40','readonly': 'True'}),
-            'lotes': forms.TextInput(attrs={'class': 'form-control',  'size': '20','readonly': 'True'}),
+            'lotes': forms.TextInput(attrs={'class': 'form-control',  'size': '10','readonly': 'True'}),
+            'representacao': forms.NumberInput(attrs={'class': 'form-control', 'size': '10', 'readonly': 'True'}),
             'compdivida': forms.NumberInput(attrs={'class': 'form-control', 'size': '10','readonly': 'True'}),
             'anuididiva': forms.NumberInput(attrs={'class': 'form-control', 'size': '10','readonly': 'True'}),
             'dt_admissao': forms.DateInput(format=('%d/%m/%Y'),attrs={'class': 'form-control', 'readonly': 'True'}),
@@ -468,3 +471,6 @@ class TiposDespesasViewForm(ModelForm):
             'id_tipo': forms.NumberInput(attrs={'class': 'form-control',  'size': '10', 'readonly': 'True'}),
             'descricao': forms.TextInput(attrs={'class': 'form-control', 'size' : '70', 'readonly': 'True'}),
         }
+
+class ImportForm(forms.Form):
+    xls_name = forms.CharField(max_length=200)

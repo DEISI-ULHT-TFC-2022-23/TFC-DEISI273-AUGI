@@ -6,6 +6,8 @@ app_name = "gestaugi"
 
 urlpatterns = [
     path('', views.home_page_view, name='home'),
+    path('login/', views.login, name='login'),
+    path('check_auth/', views.check_auth, name='check_auth'),
     path('partners/', views.partners_page_view, name='partners'),
     path('newpartner/', views.newpartner, name='newpartner'),
     path('viewpartner/<int:socio_id>', views.viewpartner, name="viewpartner"),
@@ -84,4 +86,6 @@ urlpatterns = [
     path('infodashboar4/', views.infodashboard4, name='infodashboard4'),
     path("divdashboard5/", views.divdashboard5_page_view, name="divdashboard5"),
     path('infodashboar5/', views.infodashboard5, name='infodashboard5'),
+    path('inqueritos/', views.inqueritos, name='inqueritos'),
+    path('import/', views.import_page_view, name='import'),
 ]
