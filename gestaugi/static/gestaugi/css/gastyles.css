@@ -323,3 +323,28 @@ tr:not(:first-child):hover {
 .dropdown-menu > li:hover > .dropdown-submenu {
     display: block;
 }
+
+.uploadFile {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+
+/***** Images Scroll Begin ******/
+
+div.scroll-container {
+  background-color: steelblue;
+  overflow: auto;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  width: 900px;
+}
+
+div.scroll-container img {
+  padding: 10px;
+}
+
+/***** Images Scroll End******/
