@@ -10,6 +10,8 @@ git clone "https://github.com/DEISI-ULHT-TFC-2022-23/TFC-DEISI273-AUGI.git"
 
 #Ativar ambiente virtual
 
+cd TFC-DEISI273-AUGI
+
 python -m venv venv
 
 venv\scripts\activate.bat
